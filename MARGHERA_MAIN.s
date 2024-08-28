@@ -6,7 +6,7 @@
 ;********** Constants **********
 wi		EQU 320
 he		EQU 256		; screen height
-bpls		EQU 5		; depth
+bpls		EQU 6		; depth
 bypl		EQU wi/16*2	; byte-width of 1 bitplane line (40bytes)
 bwid		EQU bpls*bypl	; byte-width of 1 pixel line (all bpls)
 rasterST		EQU $1C
@@ -19,8 +19,12 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	MOVE.W	#$C020,INTENA(A6)
 	MOVE.W	#$87E0,DMACON(A6)
 	;*--- start copper ---*
-	LEA	PF1+bypl*he-bypl,A0
+	LEA	DUMMY,A0
 	LEA	COPPER\.BplPtrs+2,A1
+	BSR.W	PokePtrs
+	;LEA	bypl*he(A0),A0
+	LEA	BGR,A0
+	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 	LEA	bypl*he(A0),A0
 	LEA	8(A1),A1		; -8 bytes on .exe!
@@ -36,7 +40,6 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	BSR.W	PokePtrs
 
 	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
-
 	MOVE.L	#COPPER,COP1LC(A6)	; ## POINT COPPERLIST ##
 ;********************  main loop  ********************
 MainLoop:
@@ -54,7 +57,6 @@ MainLoop:
 	;*--- exit ---*
 	.exit:
 	RTS
-
 
 ;********** Demo Routines **********
 PokePtrs:				; EVEN SHRUNKER REFACTOR! :)
@@ -116,6 +118,8 @@ FRAME_COUNT:	DC.W 0
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
 
+DUMMY:	INCBIN "dummy_320x256x1.raw"
+
 COPPER:	; #### COPPERLIST ####################################################
 	DC.W FMODE,$0000	; Slow fetch mode, remove if AGA demo.
 	DC.W DIWSTRT,$2C81	; 238h display window top, left | DIWSTRT - 11.393
@@ -123,12 +127,12 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W DDFSTRT,$0038	; Standard bitplane dma fetch start
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
-	DC.W BPL1MOD,-80	; BPL1MOD	 Bitplane modulo (odd planes)
-	DC.W BPL2MOD,-80	; BPL2MOD Bitplane modulo (even planes)
+	DC.W BPL1MOD,$0	; BPL1MOD	 Bitplane modulo (odd planes)
+	DC.W BPL2MOD,$0	; BPL2MOD Bitplane modulo (even planes)
 	;DC.W BPLCON1,$00	; SCROLL REGISTER (AND PLAYFIELD PRI)
 
 	.Palette:
-	DC.W $0180,$0000,$0182,$0D18,$0184,$0B06,$0186,$0F1A
+	DC.W $0180,$0000,$0182,$0111,$0184,$0B06,$0186,$0F1A
 	DC.W $0188,$0F2C,$018A,$0F5F,$018C,$0F3F,$018E,$0D2E
 	DC.W $0190,$0E0E,$0192,$0C0C,$0194,$0706,$0196,$0F8F
 	DC.W $0198,$0B0C,$019A,$0C4F,$019C,$080A,$019E,$092E
@@ -138,14 +142,14 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $01B8,$0ECF,$01BA,$016F,$01BC,$008F,$01BE,$01BF
 
 	.SpritePointers:
-	DC.W $0120,0,$122,0	; 0
-	DC.W $0124,0,$126,0	; 1
-	DC.W $0128,0,$12A,0	; 2
-	DC.W $012C,0,$12E,0	; 3
-	DC.W $0130,0,$132,0	; 4
-	DC.W $0134,0,$136,0	; 5
-	DC.W $0138,0,$13A,0	; 6
-	DC.W $013C,0,$13E,0	; 7
+	DC.W $0120,0,$122,0
+	DC.W $0124,0,$126,0
+	DC.W $0128,0,$12A,0
+	DC.W $012C,0,$12E,0
+	DC.W $0130,0,$132,0
+	DC.W $0134,0,$136,0
+	DC.W $0138,0,$13A,0
+	DC.W $013C,0,$13E,0
 
 	.BplPtrs:
 	DC.W $E0,0,$E2,0
@@ -154,7 +158,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $EC,0,$EE,0
 	DC.W $F0,0,$F2,0
 	DC.W $F4,0,$F6,0		;full 6 ptrs, in case you increase bpls
-	DC.W BPLCON0,bpls*$1000+$200	;enable bitplanes
+	DC.W BPLCON0,bpls*$1000+$600	;enable bitplanes
 
 	.Waits:
 	DC.W $2B07,$FFFE
@@ -230,6 +234,8 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $D707,$FFFE
 	DC.W $180,$E62
 	DC.W $D807,$FFFE
+	DC.W BPL1MOD,-1*bypl*3	; BPL1MOD Bitplane modulo (odd planes)
+	DC.W BPL2MOD,-1*bypl*3	; BPL2MOD Bitplane modulo (even planes)
 	DC.W $180,$E52
 	DC.W $E407,$FFFE
 	DC.W $180,$D52
@@ -253,7 +259,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $180,$632
 	DC.W $FE07,$FFFE
 	DC.W $180,$622
-	DC.W $FFDF,$FFFE		; ALLOW VPOS>$FF
+	DC.W $FFDF,$FFFE ; PAL FIX
 	DC.W $107,$FFFE
 	DC.W $180,$522
 	DC.W $507,$FFFE
@@ -280,13 +286,14 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $180,$011
 	DC.W $2907,$FFFE
 	DC.W $180,$111
-	DC.W $FFFF,$FFFE		; END COPPER LIST
+	DC.W $FFFF,$FFFE ; END COPPER LIST
 
 ;*******************************************************************************
 	SECTION ChipBuffers,BSS_C	;BSS doesn't count toward exe size
 ;*******************************************************************************
 
-PF1:		DS.B he*bwid
-PF2:		DS.B he*bwid
+BGR:		DS.B he*bypl*1
+PF1:		DS.B he*bypl*2
+PF2:		DS.B he*bypl*3
 
 END

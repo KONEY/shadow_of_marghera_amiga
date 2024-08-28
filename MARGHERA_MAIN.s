@@ -43,9 +43,11 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	MOVE.L	#COPPER,COP1LC(A6)	; ## POINT COPPERLIST ##
 ;********************  main loop  ********************
 MainLoop:
-	MOVE.W	#rasterST,D0	;No buffering, so wait until raster
-	BSR.W	WaitRaster	;is below the Display Window.
+	;MOVE.W	#rasterST,D0	;No buffering, so wait until raster
+	;BSR.W	WaitRaster	;is below the Display Window.
 	;###########################################################
+
+	BSR.W	__RACE_THE_BEAM
 
 	;*--- main loop end ---*
 	BTST	#$6,$BFE001	; POTINP - LMB pressed?
@@ -111,8 +113,100 @@ __SCROLL_X:
 	MOVE.W	#(bpls<<6)+wi/16,BLTSIZE(A6)		; BLTSIZE
 	RTS
 
+__RACE_THE_BEAM:
+	LEA	LFO_VIBRO,A0
+	LEA	LFO_NOSYNC,A1
+	MOVE.W	V_LINE_IDX,D6
+	MOVE.W	SCROLL_IDX,D0
+	ADD.W	#$2,D0
+	AND.W	#$3F-1,D0
+	MOVE.W	D0,SCROLL_IDX
+	;MOVE.W	BPLMOD_IDX,D5
+	;AND.W	#$7F-1,D5
+	;SUB.W	#$2,D5
+	;MOVE.W	D5,BPLMOD_IDX
+	CLR.L	D2
+	CLR.L	D7		; SYNC IDX
+	;MOVE.W	VHPOSR,D4		; for bug?
+	;.waitVisibleRaster:
+	;MOVE.W	VHPOSR,D4
+	;AND.W	#$FF00,D4		; read vertical beam
+	;CMP.W	#$3700,D4		; 2C
+	;BNE.S	.waitVisibleRaster
+
+	.dummyWait:
+	MOVE.W	VPOSR(A6),D1		; Read vert most sig. bits
+	BTST	#0,D1
+	BNE.S	.dummyWait
+
+	.waitNextRaster:
+	MOVE.W	VHPOSR(A6),D2
+	AND.W	#$FF00,D2		; read vertical beam
+	CMP.W	D4,D2
+	BEQ.S	.waitNextRaster
+
+	MOVE.W	VHPOSR(A6),D4		; RACE THE BEAM!
+	AND.W	#$FF00,D4		; RACE THE BEAM!
+
+	;SUB.W	#1,D6
+	;CMP.W	D6,D2		; 12.032 - #$2F00
+	;BNE.S	.noLine2
+	;MOVE.W	#$000F,$DFF19A	; WHITE LINE
+	;.noLine2:
+
+	CMP.W	#$D800,D2		; 12.032 - #$2F00
+	BNE.S	.keepLFO
+	LEA	LFO_SINE1,A0
+	MOVE.L	#$0F0000FF,$DFF182	; TIKTOK
+	BRA.S	.keepLFO2
+	.keepLFO:
+
+	;;CMP.W	#$B700,D2		; 12.032 - #$2F00
+	;;BNE.S	.keepLFO2
+	;;LEA	LFO_SINE2,A0
+	.keepLFO2:
+
+	MOVE.W	(A0,D0.W),D3	; 19DEA68E GLITCHA
+	TST.W	D7
+	BEQ.S	.noSyncShift
+	ROR.L	#4,D3
+	MOVE.W	(A1,D7.W),D3	; 19DEA68E GLITCHA
+	SUB.W	#$2,D7
+	ROL.L	#4,D3
+	.noSyncShift:
+	MOVE.W	D3,BPLCON1(A6)	; 19DEA68E GLITCHA
+	ADD.W	#$2,D0
+	AND.W	#$3F-1,D0
+
+	MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
+	BTST	#0,D1
+	BEQ.W	.waitNextRaster
+
+	;.dontSkip:
+	;CMP.W	#$0400,D2		; 12.032 - #$2F00
+	CMP.W	#$1F00,D2		; 12.032
+	BEQ.W	.waitNextRaster
+	;MOVE.W	#0,BPLCON1	; RESET REGISTER
+	;MOVE.L	#0,BPL1MOD	; RESET
+	RTS
+
 FRAME_STROBE:	DC.B 0,0
 FRAME_COUNT:	DC.W 0
+NOISE_IDX3:	DC.W 0
+NOISE_IDX5:	DC.W 0
+BPLMOD_IDX:	DC.W 0
+SCROLL_IDX:	DC.W 0
+LFO_SINE1:	DC.W 0,1,1,2,2,2,3,4,4,5,5,6,6,7,6,7,6,7,7,6,6,5,5,4,4,3,2,2,2,1,1,0
+LFO_SINE2:	DC.W 5,5,4,5,5,4,5,4,5,5,4,4,3,2,3,2,1,0,0,0,1,0,1,2,2,3,4,4,5,4,5,4
+LFO_SINE3:	DC.W 2,2,3,3,3,3,3,2,2,2,1,1,1,1,1,2,2,2,3,3,3,3,3,2,2,2,1,1,1,1,1,2
+LFO_NOISE:	DC.W 1,4,1,5,2,4,3,5,2,4,2,5,2,4,1,5,1,4,1,5,3,4,2,5,1,4,5,5,4,4,6,5
+LFO_VIBRO:	DC.W 4,5,4,5,4,5,4,5,4,5,2,1,2,1,2,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,2
+LFO_NOSYNC:	DC.W 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,3,4,7,10,13,15
+V_IDX1:		DC.W $2
+V_IDX2:		DC.W $32
+V_OFFSET:		DC.W 0,40,40,80,80,40,40,0,0,-40,-80,-80,-40,-40,0,0
+		DC.W 0,0,40,40,80,80,40,0,-40,-40,-80,-80,-40,-40,-40,0
+V_LINE_IDX:	DC.B 0,0
 
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem

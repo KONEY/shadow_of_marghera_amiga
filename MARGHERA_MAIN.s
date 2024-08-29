@@ -157,7 +157,6 @@ __RACE_THE_BEAM:
 
 	CMP.W	#$D800,D2		; 12.032 - #$2F00
 	BLO.S	.noSyncShift
-	MOVE.W	#$0FFF,$DFF180
 
 	MOVE.W	(A0,D0.W),D3	; 19DEA68E GLITCHA
 	ROR.L	#$4,D3
@@ -169,14 +168,18 @@ __RACE_THE_BEAM:
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
 	.noSyncShift:
-	MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
-	BTST	#$0,D1
-	BEQ.W	.waitNextRaster
-	;.dontSkip:
-	;CMP.W	#$2F00,D2		; 12.032 - #$2F00
-	CMP.W	#$1900,D2		; 12.032
-	BLO.W	.waitNextRaster
-	MOVE.W	#$000F,$DFF180
+	;MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
+	;BTST	#$0,D1
+	;BEQ.W	.waitNextRaster
+
+	MOVE.L	VPOSR(A6),D1
+	LSR.L	#1,D1
+	LSR.W	#7,D1
+	CMP.W	#$138,D1
+	BNE.W	.waitNextRaster
+
+	;CMP.W	#$1900,D2		; 12.032
+	;BLO.W	.waitNextRaster
 	MOVE.W	#$0,BPLCON1(A6)	; RESET REGISTER
 	RTS
 

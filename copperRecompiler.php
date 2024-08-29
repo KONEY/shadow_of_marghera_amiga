@@ -24,7 +24,18 @@ $copperLines='
 	dc.w $cb07,$fffe
 	dc.w $180,$50a
 	dc.w $db07,$fffe
-	dc.w $180,$40b
+	dc.w $180,$30c
+
+	.BplPtrsBleed:
+	DC.W $E4,0,$E6,0	; 2 comment
+	dc.w $e8,0,$ea,0	; 1
+	dc.W $EC,0,$EE,0	; 2
+	DC.W $F0,0,$F2,0	; 1
+	DC.w $F4,0,$F6,0	; 2
+
+	Dc.w BPL1MOD,-1*bypl*3	; BPL1MOD Bitplane modulo (odd planes)
+	DC.W BPL2MOD,-1*bypl*3	; BPL2MOD Bitplane modulo (even planes)
+
 	dc.w $eb07,$fffe
 	dc.w $180,$30c
 	dc.w $fb07,$fffe
@@ -37,13 +48,6 @@ $copperLines='
 	dc.w $ffff,$fffe	
 
 	DC.W $6B07,$FFFE
-
-	.BplPtrsBleed:
-	DC.W $E4,0,$E6,0	; 2
-	dc.w $e8,0,$ea,0	; 1
-	dc.w $EC,0,$EE,0	; 2
-	DC.W $F0,0,$F2,0	; 1
-	dc.w $F4,0,$F6,0	; 2
 
 	DC.W $3007,$FFFE
 	dc.w $18c,$0cf
@@ -65,6 +69,9 @@ $copperLines='
 	dc.w $18c,$0f9
 	dc.w $d107,$fffe
 	dc.w $18c,$0f8
+
+	DC.W $D807,$FFFE
+
 	dc.w $da07,$fffe
 	dc.w $18c,$0f7
 	dc.w $e307,$fffe
@@ -83,6 +90,7 @@ $copperLines='
 	dc.w $18c,$1f1
 	dc.w $fb07,$fffe
 	dc.w $18c,$1f0
+	dc.w $18A,$fff
 	dc.w $ffdf,$fffe
 	dc.w $ffff,$fffe	';
 	$copStart='2b';
@@ -103,12 +111,19 @@ $copperLines='
 			$lineIDX=$line[0];
 		}else{
 			# LINE IS AN INSTRUCTION
-			if($line[0] && !(strpos($line[1], ',')!==false)){
+			if($line[0] && !(strpos($line[1],',')!==false)){
 				$coperList[$lineIDX]['DCW'][]=
 					strtoupper('$'.str_pad($line[2], 4, '0', STR_PAD_LEFT).',$'.str_pad($line[1], 4, '0', STR_PAD_LEFT));
 			}else{
-				# LINE IS A COMPLEX INSRTUCTION, A LABEL OR AN EMPTY LINE
-				$coperList[$lineIDX]['LNS'][]=strpos(strtoupper($value), 'DC.W')!==false?strtoupper($value):$value;
+				# LINE IS A COMPLEX INSTRUCTION, A LABEL OR AN EMPTY LINE
+				if(stripos($value, 'DC.W')!==false){
+					if(!$line[1]){
+						$value=str_ireplace('dc.w','DC.W',$value);		# CONTAINS CONSTANTS
+					}else{
+						$value=strtoupper($value);		# A COMPLEX INSTRUCTION?
+					}
+				}
+				$coperList[$lineIDX]['LNS'][]=$value;
 			}
 		}
 	}
@@ -139,7 +154,9 @@ $copperLines='
 		}
 		echo '	; # Wait';
 		if($tempLine%8==0){	echo ' LN '.($tempLine);	}
-		echo "\n\t".'DC.W '.implode(',',$element['DCW']);
+		if(count($element['DCW'])){
+			echo "\n\t".'DC.W '.implode(',',$element['DCW']);
+		}
 		foreach($element['LNS'] AS $value){
 			echo "\n\t".($value);
 		}

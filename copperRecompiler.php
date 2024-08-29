@@ -70,8 +70,6 @@ $copperLines='
 	dc.w $d107,$fffe
 	dc.w $18c,$0f8
 
-	DC.W $D807,$FFFE
-
 	dc.w $da07,$fffe
 	dc.w $18c,$0f7
 	dc.w $e307,$fffe
@@ -92,11 +90,48 @@ $copperLines='
 	dc.w $18c,$1f0
 	dc.w $18A,$fff
 	dc.w $ffdf,$fffe
-	dc.w $ffff,$fffe	';
+	dc.w $ffff,$fffe
+	dc.w $2b07,$fffe
+	dc.w $188,$00f
+	dc.w $5307,$fffe
+	dc.w $188,$10f
+	dc.w $6307,$fffe
+	dc.w $188,$20f
+	dc.w $6d07,$fffe
+	dc.w $188,$30f
+	dc.w $8707,$fffe
+	dc.w $188,$40f
+	dc.w $9607,$fffe
+	dc.w $188,$50f
+	dc.w $a007,$fffe
+	dc.w $188,$60f
+	dc.w $a907,$fffe
+	dc.w $188,$70f
+	dc.w $b407,$fffe
+	dc.w $188,$80f
+	dc.w $c007,$fffe
+	dc.w $188,$90f
+	dc.w $ce07,$fffe
+	dc.w $188,$a0f
+	dc.w $cf07,$fffe
+	dc.w $188,$90f
+	dc.w $d007,$fffe
+	dc.w $188,$a0f
+	dc.w $dd07,$fffe
+	dc.w $188,$b0f
+	dc.w $ec07,$fffe
+	dc.w $188,$c0f
+	dc.w $fa07,$fffe
+	dc.w $188,$d0f
+	dc.w $ffdf,$fffe
+	dc.w $a07,$fffe
+	dc.w $188,$e0f
+	dc.w $1a07,$fffe
+	dc.w $188,$f0f
+	dc.w $ffff,$fffe';
 	$copStart='2b';
-	$coperList=[];
+	$copperList=[];
 	$lineIDX=0;
-	$totLines=0;
 	$copperLines=explode("\n", $copperLines);
 	foreach ($copperLines AS $k=>$value){
 		$value=trim($value);
@@ -112,7 +147,7 @@ $copperLines='
 		}else{
 			# LINE IS AN INSTRUCTION
 			if($line[0] && !(strpos($line[1],',')!==false)){
-				$coperList[$lineIDX]['DCW'][]=
+				$copperList[$lineIDX]['DCW'][]=
 					strtoupper('$'.str_pad($line[2], 4, '0', STR_PAD_LEFT).',$'.str_pad($line[1], 4, '0', STR_PAD_LEFT));
 			}else{
 				# LINE IS A COMPLEX INSTRUCTION, A LABEL OR AN EMPTY LINE
@@ -123,23 +158,23 @@ $copperLines='
 						$value=strtoupper($value);		# A COMPLEX INSTRUCTION?
 					}
 				}
-				$coperList[$lineIDX]['LNS'][]=$value;
+				$copperList[$lineIDX]['LNS'][]=$value;
 			}
 		}
 	}
-	//print_r($coperList);	exit;
+	//print_r($copperList);	exit;
 	#######################################
 	error_reporting(E_ERROR);
 	echo "\n".'	.Waits:';
 	for($i=hexdec($copStart); $i<hexdec('ff'); $i++){
-		if(!array_key_exists($i, $coperList)){	continue;	}
-		extractCopLines($i,$coperList[$i]);
+		if(!array_key_exists($i, $copperList)){	continue;	}
+		extractCopLines($i,$copperList[$i]);
 	}
 	echo "\n".'	DC.W $FFDF,$FFFE';
 	echo '	; # PAL FIX';
 	for($i=hexdec('00'); $i<hexdec('1c'); $i++){
-		if(!array_key_exists($i, $coperList)){	continue;	}
-		extractCopLines($i,$coperList[$i]);
+		if(!array_key_exists($i, $copperList)){	continue;	}
+		extractCopLines($i,$copperList[$i]);
 	}
 	echo "\n".'	DC.W $FFFF,$FFFE';
 	echo '	; # END COPPER LIST';
@@ -161,6 +196,6 @@ $copperLines='
 			echo "\n\t".($value);
 		}
 	}
-	//echo " (".count($copperLines)." | ". count($coperList). ")";
+	//echo " (".count($copperLines)." | ". count($copperList). ")";
 ?>
 

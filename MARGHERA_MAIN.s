@@ -9,6 +9,7 @@ he		EQU 256		; screen height
 bpls		EQU 6		; depth
 bypl		EQU wi/16*2	; byte-width of 1 bitplane line (40bytes)
 bwid		EQU bpls*bypl	; byte-width of 1 pixel line (all bpls)
+blitHe		EQU 128
 rasterST		EQU $1C
 ;*******************************
 
@@ -35,20 +36,34 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	BSR.W	PokePtrs
 
 	LEA	PF2,A0
-	LEA	COPPER\.BplPtrsBleed+2,A1	
+	LEA	COPPER\.BplPtrsBled1+2,A1	
 	BSR.W	PokePtrs
-	LEA	bypl*he/2(A0),A0
+	LEA	bypl*blitHe(A0),A0
 	LEA	16(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
-	LEA	bypl*he/2(A0),A0
+	LEA	bypl*blitHe(A0),A0
 	LEA	16(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
 	LEA	PF1,A0
-	LEA	COPPER\.BplPtrsBleed+10,A1
+	LEA	COPPER\.BplPtrsBled1+10,A1
 	BSR.W	PokePtrs
-	LEA	bypl*he/2(A0),A0
+	LEA	bypl*blitHe(A0),A0
 	LEA	16(A1),A1		; -8 bytes on .exe!
+	BSR.W	PokePtrs
+
+	LEA	BLEED+blitHe*bypl+bypl,A0
+	LEA	COPPER\.BplPtrsBled2+2,A1	
+	BSR.W	PokePtrs
+	LEA	8(A1),A1		; -8 bytes on .exe!
+	BSR.W	PokePtrs
+	LEA	8(A1),A1		; -8 bytes on .exe!
+	BSR.W	PokePtrs
+	LEA	8(A1),A1		; -8 bytes on .exe!
+	BSR.W	PokePtrs
+	LEA	8(A1),A1		; -8 bytes on .exe!
+	BSR.W	PokePtrs
+	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
 	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
@@ -126,8 +141,8 @@ __SCROLL_X:
 	RTS
 
 __RACE_THE_BEAM:
-	LEA	LFO_SINE1,A0
-	LEA	LFO_NOISE,A1
+	LEA	LFO_SINE2,A0
+	LEA	LFO_SINE1,A1
 	MOVE.W	SCROLL_IDX,D0
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
@@ -160,8 +175,7 @@ __RACE_THE_BEAM:
 
 	MOVE.W	(A0,D0.W),D3	; 19DEA68E GLITCHA
 	ROR.L	#$4,D3
-	MOVE.W	(A1,D7.W),D3	; 19DEA68E GLITCHA
-	SUB.W	#$2,D7
+	MOVE.W	(A1,D0.W),D3	; 19DEA68E GLITCHA
 	ROL.L	#$4,D3
 
 	MOVE.W	D3,BPLCON1(A6)	; 19DEA68E GLITCHA
@@ -186,12 +200,9 @@ __RACE_THE_BEAM:
 FRAME_STROBE:	DC.B 0,0
 FRAME_COUNT:	DC.W 0
 SCROLL_IDX:	DC.W 0
-LFO_SINE1:	DC.W 0,1,1,2,2,2,3,4,4,5,5,6,6,7,6,7,6,7,7,6,6,5,5,4,4,3,2,2,2,1,1,0
-LFO_SINE2:	DC.W 5,5,4,5,5,4,5,4,5,5,4,4,3,2,3,2,1,0,0,0,1,0,1,2,2,3,4,4,5,4,5,4
-LFO_SINE3:	DC.W 2,2,3,3,3,3,3,2,2,2,1,1,1,1,1,2,2,2,3,3,3,3,3,2,2,2,1,1,1,1,1,2
-LFO_NOISE:	DC.W 1,4,1,5,2,4,3,5,2,4,2,5,2,4,1,5,1,4,1,5,3,4,2,5,1,4,5,5,4,4,6,5
-LFO_VIBRO:	DC.W 4,5,4,5,4,5,4,5,4,5,2,1,2,1,2,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,2
-LFO_NOSYNC:	DC.W 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,3,4,7,10,13,15
+LFO_SINE1:	DC.W 1,1,2,2,2,3,4,4,5,5,6,6,7,6,7,6,7,7,6,6,5,5,4,4,3,2,2,2,1,1,0,1
+LFO_SINE2:	DC.W 0,0,1,2,2,3,2,3,4,4,5,5,6,6,7,8,7,6,7,7,6,6,5,5,4,4,3,3,2,2,1,1,0
+LFO_SINE3:	DC.W 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0,0
 
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
@@ -208,15 +219,15 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W DDFSTRT,$0038	; Standard bitplane dma fetch start
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
-	DC.W BPLCON2,$20	; SCROLL REGISTER (AND PLAYFIELD PRI)
+	DC.W BPLCON2,$40	; SCROLL REGISTER (AND PLAYFIELD PRI)
 	DC.W BPL1MOD,$00	; BPL1MOD	 Bitplane modulo (odd planes)
 	DC.W BPL2MOD,$00	; BPL2MOD Bitplane modulo (even planes)
 
 	.Palette:
-	DC.W $0180,$0000,$0182,$0F0F,$0184,$0000,$0186,$0777
-	DC.W $0188,$0444,$018A,$0111,$018C,$0322,$018E,$0422
-	DC.W $0190,$0000,$0192,$0344,$0194,$0555,$0196,$0222
-	DC.W $0198,$0666,$019A,$0888,$019C,$0EED,$019E,$0AA9
+	DC.W $0180,$0000,$0182,$0555,$0184,$0222,$0186,$0111
+	DC.W $0188,$0000,$018A,$0222,$018C,$0555,$018E,$0555
+	DC.W $0190,$0000,$0192,$0555,$0194,$0222,$0196,$0666
+	DC.W $0198,$0888,$019A,$0EED,$019C,$0AA9,$019E,$0344
 
 	.SpritePointers:
 	DC.W $0120,0,$122,0
@@ -259,7 +270,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $5E07,$FFFE
 
 	DC.W $6B07,$FFFE
-	.BplPtrsBleed:
+	.BplPtrsBled1:
 	DC.W $E4,0,$E6,0	; 2
 	DC.W $E8,0,$EA,0	; 1
 	DC.W $EC,0,$EE,0	; 2
@@ -356,6 +367,16 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $182,$312
 	DC.W $C07,$FFFE
 	DC.W $182,$212
+	DC.W $D07,$FFFE
+
+	.BplPtrsBled2:
+	DC.W $E0,0,$E2,0	; 1
+	DC.W $E4,0,$E6,0	; 2
+	DC.W $E8,0,$EA,0	; 1
+	DC.W $EC,0,$EE,0	; 2
+	DC.W $F0,0,$F2,0	; 1
+	DC.W $F4,0,$F6,0	; 2
+
 	DC.W $1007,$FFFE
 	DC.W $182,$112
 	DC.W $1307,$FFFE
@@ -378,7 +399,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	SECTION ChipBuffers,BSS_C	;BSS doesn't count toward exe size
 ;*******************************************************************************
 
-BLEED:		DS.B he/2*bwid
+BLEED:		DS.B blitHe*bypl
 ;BGR:		DS.B he*bypl*1
 ;PF1:		DS.B he*bypl*2
 ;PF2:		DS.B he*bypl*3

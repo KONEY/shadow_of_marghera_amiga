@@ -1,5 +1,5 @@
 <?php
-## KONEY 2024 ## REMOVE COMMENTS BEFORE PARSING! ##
+## KONEY 2024 ## DEFRAG COPPERLISTS!
 $copperLines='
 	dc.w $2b07,$fffe
 	dc.w $180,$f00
@@ -34,7 +34,7 @@ $copperLines='
 	dc.w $180,$10e
 	dc.w $1b07,$fffe
 	DC.W $180,$00F
-	dc.w $ffff,$fffe
+	dc.w $ffff,$fffe	
 
 	DC.W $6B07,$FFFE
 
@@ -104,16 +104,17 @@ $copperLines='
 		}else{
 			# LINE IS AN INSTRUCTION
 			if($line[0] && !(strpos($line[1], ',')!==false)){
-				$coperList[$lineIDX][]=
-					"DC.W ".strtoupper('$'.str_pad($line[2], 4, '0', STR_PAD_LEFT).',$'.str_pad($line[1], 4, '0', STR_PAD_LEFT));
+				$coperList[$lineIDX]['DCW'][]=
+					strtoupper('$'.str_pad($line[2], 4, '0', STR_PAD_LEFT).',$'.str_pad($line[1], 4, '0', STR_PAD_LEFT));
 			}else{
 				# LINE IS A COMPLEX INSRTUCTION, A LABEL OR AN EMPTY LINE
-				$coperList[$lineIDX][]=strpos(strtoupper($value), 'DC.W')!==false?strtoupper($value):$value;
+				$coperList[$lineIDX]['LNS'][]=strpos(strtoupper($value), 'DC.W')!==false?strtoupper($value):$value;
 			}
 		}
 	}
 	//print_r($coperList);	exit;
-
+	#######################################
+	error_reporting(E_ERROR);
 	echo "\n".'	.Waits:';
 	for($i=hexdec($copStart); $i<hexdec('ff'); $i++){
 		if(!array_key_exists($i, $coperList)){	continue;	}
@@ -121,19 +122,16 @@ $copperLines='
 	}
 	echo "\n".'	DC.W $FFDF,$FFFE';
 	echo '	; # PAL FIX';
-	$totLines++;
 	for($i=hexdec('00'); $i<hexdec('1c'); $i++){
 		if(!array_key_exists($i, $coperList)){	continue;	}
 		extractCopLines($i,$coperList[$i]);
 	}
 	echo "\n".'	DC.W $FFFF,$FFFE';
 	echo '	; # END COPPER LIST';
-	$totLines++;
 
 	function extractCopLines($wait,$element){
 		GLOBAL $totLines,$copStart;
 		echo "\n\t"."DC.W $".strtoupper(str_pad(dechex($wait), 2, '0', STR_PAD_LEFT)).'07'.",".'$FFFE';
-		$totLines++;
 		if($wait<hexdec($copStart)){
 			$tempLine=$wait+212;
 		}else{
@@ -141,13 +139,11 @@ $copperLines='
 		}
 		echo '	; # Wait';
 		if($tempLine%8==0){	echo ' LN '.($tempLine);	}
-		foreach($element AS $intruction){
-			echo "\n\t".($intruction);
-			if((strpos($intruction, 'DC.W')!==false)){
-				$totLines++;
-			}
+		echo "\n\t".'DC.W '.implode(',',$element['DCW']);
+		foreach($element['LNS'] AS $value){
+			echo "\n\t".($value);
 		}
 	}
-	echo "\n\n-------------------------------\n\tTOT: $totLines LINES";
 	//echo " (".count($copperLines)." | ". count($coperList). ")";
 ?>
+

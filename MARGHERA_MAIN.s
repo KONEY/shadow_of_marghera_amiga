@@ -147,7 +147,7 @@ __RACE_THE_BEAM:
 	;BNE.S	.waitVisibleRaster
 
 	.dummyWait:
-	MOVE.W	VPOSR(A6),D1		; Read vert most sig. bits
+	MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
 	BTST	#0,D1
 	BNE.S	.dummyWait
 
@@ -157,7 +157,7 @@ __RACE_THE_BEAM:
 	CMP.W	D4,D2
 	BEQ.S	.waitNextRaster
 
-	MOVE.W	VHPOSR(A6),D4		; RACE THE BEAM!
+	MOVE.W	VHPOSR(A6),D4	; RACE THE BEAM!
 	AND.W	#$FF00,D4		; RACE THE BEAM!
 
 	;SUB.W	#1,D6

@@ -19,24 +19,36 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	MOVE.W	#$C020,INTENA(A6)
 	MOVE.W	#$87E0,DMACON(A6)
 	;*--- start copper ---*
-	LEA	DUMMY,A0
+	LEA	BGR,A0
 	LEA	COPPER\.BplPtrs+2,A1
 	BSR.W	PokePtrs
-	;LEA	bypl*he(A0),A0
-	LEA	BGR,A0
+	LEA	BLEED,A0
 	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
-	LEA	bypl*he(A0),A0
 	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
-	LEA	bypl*he(A0),A0
 	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
-	LEA	bypl*he(A0),A0
 	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
-	LEA	bypl*he(A0),A0
 	LEA	8(A1),A1		; -8 bytes on .exe!
+	BSR.W	PokePtrs
+
+	LEA	PF2,A0
+	LEA	COPPER\.BplPtrsBleed+2,A1	
+	BSR.W	PokePtrs
+	LEA	bypl*he/2(A0),A0
+	LEA	16(A1),A1		; -8 bytes on .exe!
+	BSR.W	PokePtrs
+	LEA	bypl*he/2(A0),A0
+	LEA	16(A1),A1		; -8 bytes on .exe!
+	BSR.W	PokePtrs
+
+	LEA	PF1,A0
+	LEA	COPPER\.BplPtrsBleed+10,A1
+	BSR.W	PokePtrs
+	LEA	bypl*he/2(A0),A0
+	LEA	16(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
 	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
@@ -47,7 +59,7 @@ MainLoop:
 	;BSR.W	WaitRaster	;is below the Display Window.
 	;###########################################################
 
-	BSR.W	__RACE_THE_BEAM
+	;BSR.W	__RACE_THE_BEAM
 
 	;*--- main loop end ---*
 	BTST	#$6,$BFE001	; POTINP - LMB pressed?
@@ -212,7 +224,9 @@ V_LINE_IDX:	DC.B 0,0
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
 
-DUMMY:	INCBIN "dummy_320x256x1.raw"
+BGR:	INCBIN "BGR_320x192x1.raw"
+PF1:	INCBIN "PF1_320x128x2.raw"
+PF2:	INCBIN "PF2_320x128x3.raw"
 
 COPPER:	; #### COPPERLIST ####################################################
 	DC.W FMODE,$0000	; Slow fetch mode, remove if AGA demo.
@@ -221,19 +235,15 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W DDFSTRT,$0038	; Standard bitplane dma fetch start
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
-	DC.W BPL1MOD,$0	; BPL1MOD	 Bitplane modulo (odd planes)
-	DC.W BPL2MOD,$0	; BPL2MOD Bitplane modulo (even planes)
-	;DC.W BPLCON1,$00	; SCROLL REGISTER (AND PLAYFIELD PRI)
+	DC.W BPLCON2,$20	; SCROLL REGISTER (AND PLAYFIELD PRI)
+	DC.W BPL1MOD,$00	; BPL1MOD	 Bitplane modulo (odd planes)
+	DC.W BPL2MOD,$00	; BPL2MOD Bitplane modulo (even planes)
 
 	.Palette:
-	DC.W $0180,$0000,$0182,$0111,$0184,$0B06,$0186,$0F1A
-	DC.W $0188,$0F2C,$018A,$0F5F,$018C,$0F3F,$018E,$0D2E
-	DC.W $0190,$0E0E,$0192,$0C0C,$0194,$0706,$0196,$0F8F
-	DC.W $0198,$0B0C,$019A,$0C4F,$019C,$080A,$019E,$092E
-	DC.W $01A0,$060A,$01A2,$0C6F,$01A4,$0406,$01A6,$0204
-	DC.W $01A8,$085F,$01AA,$052E,$01AC,$0F16,$01AE,$011C
-	DC.W $01B0,$0016,$01B2,$003C,$01B4,$015E,$01B6,$058F
-	DC.W $01B8,$0ECF,$01BA,$016F,$01BC,$008F,$01BE,$01BF
+	DC.W $0180,$0000,$0182,$0F0F,$0184,$0000,$0186,$0777
+	DC.W $0188,$0444,$018A,$0111,$018C,$0322,$018E,$0422
+	DC.W $0190,$0000,$0192,$0344,$0194,$0555,$0196,$0222
+	DC.W $0198,$0666,$019A,$0888,$019C,$0EED,$019E,$0AA9
 
 	.SpritePointers:
 	DC.W $0120,0,$122,0
@@ -256,138 +266,148 @@ COPPER:	; #### COPPERLIST ####################################################
 
 	.Waits:
 	DC.W $2B07,$FFFE
-	DC.W $180,$012
+	DC.W $182,$012
 	DC.W $4207,$FFFE
-	DC.W $180,$013
+	DC.W $182,$013
 	DC.W $4307,$FFFE
-	DC.W $180,$012
+	DC.W $182,$012
 	DC.W $4407,$FFFE
-	DC.W $180,$013
+	DC.W $182,$013
 	DC.W $4F07,$FFFE
-	DC.W $180,$003
+	DC.W $182,$003
 	DC.W $5007,$FFFE
-	DC.W $180,$013
+	DC.W $182,$013
 	DC.W $5307,$FFFE
-	DC.W $180,$003
+	DC.W $182,$003
 	DC.W $5507,$FFFE
-	DC.W $180,$013
+	DC.W $182,$013
 	DC.W $5607,$FFFE
-	DC.W $180,$003
+	DC.W $182,$003
 	DC.W $5E07,$FFFE
-	DC.W $180,$103
+
+	DC.W $6B07,$FFFE
+	.BplPtrsBleed:
+	DC.W $E4,0,$E6,0	; 2
+	DC.W $E8,0,$EA,0	; 1
+	DC.W $EC,0,$EE,0	; 2
+	DC.W $F0,0,$F2,0	; 1
+	DC.W $F4,0,$F6,0	; 2	;full 6 ptrs, in case you increase bpls
+
+	DC.W $182,$103
 	DC.W $7207,$FFFE
-	DC.W $180,$203
+	DC.W $182,$203
 	DC.W $8607,$FFFE
-	DC.W $180,$303
+	DC.W $182,$303
 	DC.W $8707,$FFFE
-	DC.W $180,$203
+	DC.W $182,$203
 	DC.W $8807,$FFFE
-	DC.W $180,$303
+	DC.W $182,$303
 	DC.W $9A07,$FFFE
-	DC.W $180,$403
+	DC.W $182,$403
 	DC.W $9B07,$FFFE
-	DC.W $180,$303
+	DC.W $182,$303
 	DC.W $9C07,$FFFE
-	DC.W $180,$403
+	DC.W $182,$403
 	DC.W $A407,$FFFE
-	DC.W $180,$503
+	DC.W $182,$503
 	DC.W $A807,$FFFE
-	DC.W $180,$513
+	DC.W $182,$513
 	DC.W $A907,$FFFE
-	DC.W $180,$613
+	DC.W $182,$613
 	DC.W $AE07,$FFFE
-	DC.W $180,$713
+	DC.W $182,$713
 	DC.W $AF07,$FFFE
-	DC.W $180,$723
+	DC.W $182,$723
 	DC.W $B307,$FFFE
-	DC.W $180,$823
+	DC.W $182,$823
 	DC.W $B707,$FFFE
-	DC.W $180,$833
+	DC.W $182,$833
 	DC.W $B807,$FFFE
-	DC.W $180,$933
+	DC.W $182,$933
 	DC.W $BD07,$FFFE
-	DC.W $180,$A33
+	DC.W $182,$A33
 	DC.W $BF07,$FFFE
-	DC.W $180,$A43
+	DC.W $182,$A43
 	DC.W $C207,$FFFE
-	DC.W $180,$B43
+	DC.W $182,$B43
 	DC.W $C607,$FFFE
-	DC.W $180,$B53
+	DC.W $182,$B53
 	DC.W $C707,$FFFE
-	DC.W $180,$C53
+	DC.W $182,$C53
 	DC.W $CC07,$FFFE
-	DC.W $180,$D53
+	DC.W $182,$D53
 	DC.W $CD07,$FFFE
-	DC.W $180,$D63
+	DC.W $182,$D63
 	DC.W $D207,$FFFE
-	DC.W $180,$E63
+	DC.W $182,$E63
 	DC.W $D407,$FFFE
-	DC.W $180,$E62
+	DC.W $182,$E62
 	DC.W $D607,$FFFE
-	DC.W $180,$E52
+	DC.W $182,$E52
 	DC.W $D707,$FFFE
-	DC.W $180,$E62
+	DC.W $182,$E62
 	DC.W $D807,$FFFE
 	DC.W BPL1MOD,-1*bypl*3	; BPL1MOD Bitplane modulo (odd planes)
 	DC.W BPL2MOD,-1*bypl*3	; BPL2MOD Bitplane modulo (even planes)
-	DC.W $180,$E52
+	DC.W $182,$E52
 	DC.W $E407,$FFFE
-	DC.W $180,$D52
+	DC.W $182,$D52
 	DC.W $E507,$FFFE
-	DC.W $180,$D42
+	DC.W $182,$D42
 	DC.W $E807,$FFFE
-	DC.W $180,$C42
+	DC.W $182,$C42
 	DC.W $EB07,$FFFE
-	DC.W $180,$B42
+	DC.W $182,$B42
 	DC.W $EF07,$FFFE
-	DC.W $180,$A42
+	DC.W $182,$A42
 	DC.W $F207,$FFFE
-	DC.W $180,$A32
+	DC.W $182,$A32
 	DC.W $F307,$FFFE
-	DC.W $180,$932
+	DC.W $182,$932
 	DC.W $F607,$FFFE
-	DC.W $180,$832
+	DC.W $182,$832
 	DC.W $F907,$FFFE
-	DC.W $180,$732
+	DC.W $182,$732
 	DC.W $FD07,$FFFE
-	DC.W $180,$632
+	DC.W $182,$632
 	DC.W $FE07,$FFFE
-	DC.W $180,$622
+	DC.W $182,$622
 	DC.W $FFDF,$FFFE ; PAL FIX
 	DC.W $107,$FFFE
-	DC.W $180,$522
+	DC.W $182,$522
 	DC.W $507,$FFFE
-	DC.W $180,$422
+	DC.W $182,$422
 	DC.W $807,$FFFE
-	DC.W $180,$322
+	DC.W $182,$322
 	DC.W $B07,$FFFE
-	DC.W $180,$312
+	DC.W $182,$312
 	DC.W $C07,$FFFE
-	DC.W $180,$212
+	DC.W $182,$212
 	DC.W $1007,$FFFE
-	DC.W $180,$112
+	DC.W $182,$112
 	DC.W $1307,$FFFE
-	DC.W $180,$012
+	DC.W $182,$012
 	DC.W $1907,$FFFE
-	DC.W $180,$011
+	DC.W $182,$011
 	DC.W $1A07,$FFFE
-	DC.W $180,$012
+	DC.W $182,$012
 	DC.W $1B07,$FFFE
-	DC.W $180,$011
+	DC.W $182,$011
 	DC.W $2707,$FFFE
-	DC.W $180,$111
+	DC.W $182,$111
 	DC.W $2807,$FFFE
-	DC.W $180,$011
+	DC.W $182,$011
 	DC.W $2907,$FFFE
-	DC.W $180,$111
+	DC.W $182,$111
 	DC.W $FFFF,$FFFE ; END COPPER LIST
 
 ;*******************************************************************************
 	SECTION ChipBuffers,BSS_C	;BSS doesn't count toward exe size
 ;*******************************************************************************
 
-BGR:		DS.B he*bypl*1
-PF1:		DS.B he*bypl*2
-PF2:		DS.B he*bypl*3
+BLEED:		DS.B he/2*bwid
+;BGR:		DS.B he*bypl*1
+;PF1:		DS.B he*bypl*2
+;PF2:		DS.B he*bypl*3
 
 END

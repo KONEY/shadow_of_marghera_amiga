@@ -145,7 +145,7 @@ __RACE_THE_BEAM:
 	LEA	LFO_SINE1,A1
 	MOVE.W	SCROLL_IDX,D0
 	ADD.W	#$2,D0
-	AND.W	#$3F-1,D0
+	AND.W	#$7F-1,D0
 	MOVE.W	D0,SCROLL_IDX
 	CLR.L	D2
 	CLR.L	D7		; SYNC IDX
@@ -180,7 +180,7 @@ __RACE_THE_BEAM:
 
 	MOVE.W	D3,BPLCON1(A6)	; 19DEA68E GLITCHA
 	ADD.W	#$2,D0
-	AND.W	#$3F-1,D0
+	AND.W	#$7F-1,D0
 	.noSyncShift:
 	;MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
 	;BTST	#$0,D1
@@ -202,7 +202,7 @@ FRAME_COUNT:	DC.W 0
 SCROLL_IDX:	DC.W 0
 LFO_SINE1:	DC.W 1,1,2,2,2,3,4,4,5,5,6,6,7,6,7,6,7,7,6,6,5,5,4,4,3,2,2,2,1,1,0,1
 LFO_SINE2:	DC.W 0,0,1,2,2,3,2,3,4,4,5,5,6,6,7,8,7,6,7,7,6,6,5,5,4,4,3,3,2,2,1,1,0
-LFO_SINE3:	DC.W 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0,0
+LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
 
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
@@ -224,8 +224,8 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W BPL2MOD,$00	; BPL2MOD Bitplane modulo (even planes)
 
 	.Palette:
-	DC.W $0180,$0000,$0182,$0555,$0184,$0222,$0186,$0111
-	DC.W $0188,$0000,$018A,$0222,$018C,$0555,$018E,$0555
+	DC.W $0180,$0000,$0182,$0555,$0184,$0333,$0186,$0333
+	DC.W $0188,$0222,$018A,$0222,$018C,$0444,$018E,$0444
 	DC.W $0190,$0000,$0192,$0555,$0194,$0222,$0196,$0666
 	DC.W $0198,$0888,$019A,$0EED,$019C,$0AA9,$019E,$0344
 
@@ -333,6 +333,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $D807,$FFFE
 	DC.W BPL1MOD,-1*bypl*3	; BPL1MOD Bitplane modulo (odd planes)
 	DC.W BPL2MOD,-1*bypl*3	; BPL2MOD Bitplane modulo (even planes)
+	;DC.W BPLCON0,(bpls-1)*$1000+$A00	; HAM!
 	DC.W $182,$E52
 	DC.W $E407,$FFFE
 	DC.W $182,$D52

@@ -73,8 +73,12 @@ MainLoop:
 	;MOVE.W	#rasterST,D0	;No buffering, so wait until raster
 	;BSR.W	WaitRaster	;is below the Display Window.
 	;###########################################################
-
 	BSR.W	__RACE_THE_BEAM
+
+	LEA	PF2+blitHe*bypl*3-2,A4
+	BSR.W	__SCROLL_PF2
+	LEA	PF1+blitHe*bypl*2-2,A4
+	BSR.W	__SCROLL_PF1
 
 	;*--- main loop end ---*
 	BTST	#$6,$BFE001	; POTINP - LMB pressed?
@@ -113,43 +117,18 @@ _WipeMEM:		; a1=screen destination address to clear
 	MOVE.W	#he+wi/16,BLTSIZE(A6)
 	RTS
 
-__SCROLL_X:
-	;RTS
-	MOVE.W	#%0000000000000000,D2
-	BRA.S	.noDesc
-	.desc:
-	;## DESC ##
-	MOVE.W	#%0000000000000010,D2
-	;## DESC ##
-	.noDesc:
-	;RTS
-	MOVE.W	#%1001111100001000,D1		; %1000100111110000 +ROL.W	#4,D1
-	MOVE.B	D0,D1
-	ROR.W	#$4,D1
-	;BSR	WaitBlitter
-	MOVE.W	#$8400,DMACON(A6)			; BLIT NASTY ENABLE
-	MOVE.W	#$0400,DMACON(A6)			; BLIT NASTY DISABLE
-	MOVE.W	D1,BLTCON0(A6)			; BLTCON0
-	MOVE.W	D2,BLTCON1(A6)
-	MOVE.L	#$FFFFFFFF,BLTAFWM(A6)		; THEY'LL NEVER
-	MOVE.W	#bypl,BLTAMOD(A6)			; BLTAMOD
-	MOVE.W	#bypl,BLTDMOD(A6)			; BLTDMOD
-
-	MOVE.L	A5,BLTAPTH(A6)			; BLTAPT
-	MOVE.L	A2,BLTDPTH(A6)
-	MOVE.W	#(bpls<<6)+wi/16,BLTSIZE(A6)		; BLTSIZE
-	RTS
-
 __RACE_THE_BEAM:
-	LEA	LFO_SINE1,A0
-	LEA	LFO_SINE2,A1
+	;LEA	LFO_SINE_AMP,A0
+	LEA	LFO_SINE2,A0
 	MOVE.W	SCROLL_IDX,D0
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
 	MOVE.W	D0,SCROLL_IDX
 	CLR.L	D2
-	CLR.L	D7		; SYNC IDX
-	;MOVE.W	#14,D6		; LFO NEGATIVE AMPLITUDE
+	;CLR.L	D7		; SYNC IDX
+	;MOVE.W	#$F,D6		; LFO NEGATIVE AMPLITUDE
+	;;MOVE.W	AMP_LINES,D6
+	;;MOVE.W	D6,D7
 	;MOVE.W	VHPOSR(A6),D4	; for bug?
 	;.waitVisibleRaster:
 	;MOVE.W	VHPOSR(A6),D4
@@ -175,16 +154,24 @@ __RACE_THE_BEAM:
 	BLO.S	.noSyncShift
 
 	MOVE.W	(A0,D0.W),D3	; 19DEA68E GLITCHA
-	;SUB.W	D6,D3		; LFO AMP
 	ROR.L	#$4,D3
-	MOVE.W	(A1,D0.W),D3	; 19DEA68E GLITCHA
-	;SUB.W	D6,D3		; LFO AMP
+	MOVE.W	(A0,D0.W),D3	; 19DEA68E GLITCHA
 	ROL.L	#$4,D3
 
 	MOVE.W	D3,BPLCON1(A6)	; 19DEA68E GLITCHA
+
+	;TST.W	D7
+	;BNE.S	.notFourthLine
+	;LEA	$20(A0),A0
+	;;SUB.W	#$2,D0
+	;ADD.W	#$1,D6
+	;MOVE.W	D6,D7		; EVERY x LINES...
+	;.notFourthLine:
+	;SUB.W	#$1,D7		; EVERY x LINES...
+
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
-	;SUB.W	#$1,D6		; INCREASE LFO AMP
+
 	.noSyncShift:
 	;MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
 	;BTST	#$0,D1
@@ -201,13 +188,42 @@ __RACE_THE_BEAM:
 	MOVE.W	#$0,BPLCON1(A6)	; RESET REGISTER
 	RTS
 
+__SCROLL_PF2:
+	MOVE.W	#$8400,DMACON(A6)			; BLIT NASTY ENABLE
+	MOVE.W	#$0400,DMACON(A6)			; BLIT NASTY DISABLE
+	MOVE.L	#(((2<<12)+%100111110000)<<16)+%10,BLTCON0(A6)
+	MOVE.L	#$FFFFFFFF,BLTAFWM(A6)
+	MOVE.L	#$0,BLTAMOD(A6)
+	MOVE.L	A4,BLTAPTH(A6)
+	MOVE.L	A4,BLTDPTH(A6)
+	MOVE.W	#(blitHe*3<<6)+wi/16,BLTSIZE(A6)	; BLTSIZE
+	RTS
+
+__SCROLL_PF1:
+	MOVE.W	#$8400,DMACON(A6)			; BLIT NASTY ENABLE
+	MOVE.W	#$0400,DMACON(A6)			; BLIT NASTY DISABLE
+	MOVE.L	#(((1<<12)+%100111110000)<<16)+%10,BLTCON0(A6)
+	MOVE.L	#$FFFFFFFF,BLTAFWM(A6)
+	MOVE.L	#$0,BLTAMOD(A6)
+	MOVE.L	A4,BLTAPTH(A6)
+	MOVE.L	A4,BLTDPTH(A6)
+	MOVE.W	#(blitHe*2<<6)+wi/16,BLTSIZE(A6)	; BLTSIZE
+	RTS
+
 FRAME_STROBE:	DC.B 0,0
 FRAME_COUNT:	DC.W 0
 SCROLL_IDX:	DC.W 0
+AMP_LINES:	DC.W 1
 LFO_SINE1:	DC.W 7,8,10,11,12,13,13,14,14,15,13,13,12,11,10,8,7,6,4,3,2,1,1,0,1,0,1,1,2,3,4,6
-LFO_SINE2:	DC.W 11,12,13,13,14,15,14,13,13,12,11,10,8,7,6,4,3,2,1,1,0,0,1,1,2,3,4,6,7,8,10
+LFO_SINE2:	DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5
 LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
-
+LFO_SINE_AMP:	DC.W 1,1,2,2,2,3,3,3,3,3,3,3,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+		DC.W 2,3,3,4,4,4,5,5,5,5,5,4,4,4,3,3,2,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1
+		DC.W 3,4,5,5,6,6,7,7,7,7,7,6,6,5,5,4,3,2,1,1,0,0,0,0,0,0,0,0,0,1,1,2
+		DC.W 4,5,6,7,8,8,9,9,9,9,9,8,8,7,6,5,4,3,2,1,0,0,0,0,0,0,0,0,0,1,2,3
+		DC.W 5,6,7,8,9,10,11,11,11,11,11,10,9,8,7,6,5,4,3,2,1,0,0,0,0,0,0,0,1,2,3,4
+		DC.W 6,7,9,10,11,12,12,13,13,13,12,12,11,10,9,7,6,5,3,2,1,0,0,0,0,0,0,0,1,2,3,5
+		DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
@@ -224,6 +240,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
 	DC.W BPLCON2,$40	; SCROLL REGISTER (AND PLAYFIELD PRI)
+	DC.W BPLCON1,$88
 	DC.W BPL1MOD,$00	; BPL1MOD	 Bitplane modulo (odd planes)
 	DC.W BPL2MOD,$00	; BPL2MOD Bitplane modulo (even planes)
 

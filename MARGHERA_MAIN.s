@@ -70,15 +70,15 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	MOVE.L	#COPPER,COP1LC(A6)	; ## POINT COPPERLIST ##
 ;********************  main loop  ********************
 MainLoop:
+	BSR.W	__RACE_THE_BEAM
 	;MOVE.W	#rasterST,D0	;No buffering, so wait until raster
 	;BSR.W	WaitRaster	;is below the Display Window.
 	;###########################################################
-	BSR.W	__RACE_THE_BEAM
+	MOVE.L	FRM_NEXT_ADDR,A3
+	JSR	(A3)		; EXECUTE SUBROUTINE BLOCK#
 
-	LEA	PF2+blitHe*bypl*3-2,A4
-	BSR.W	__SCROLL_PF2
-	LEA	PF1+blitHe*bypl*2-2,A4
-	BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF2
+	;BSR.W	__SCROLL_PF1
 
 	;*--- main loop end ---*
 	BTST	#$6,$BFE001	; POTINP - LMB pressed?
@@ -189,17 +189,21 @@ __RACE_THE_BEAM:
 	RTS
 
 __SCROLL_PF2:
+	LEA	PF2+blitHe*bypl*3-2,A4
 	MOVE.W	#$8400,DMACON(A6)			; BLIT NASTY ENABLE
 	MOVE.W	#$0400,DMACON(A6)			; BLIT NASTY DISABLE
+	;BSR	WaitBlitter
 	MOVE.L	#(((2<<12)+%100111110000)<<16)+%10,BLTCON0(A6)
 	MOVE.L	#$FFFFFFFF,BLTAFWM(A6)
 	MOVE.L	#$0,BLTAMOD(A6)
 	MOVE.L	A4,BLTAPTH(A6)
 	MOVE.L	A4,BLTDPTH(A6)
 	MOVE.W	#(blitHe*3<<6)+wi/16,BLTSIZE(A6)	; BLTSIZE
+	MOVE.W	#$98,COPPER\.PFsScrolling+2
 	RTS
 
 __SCROLL_PF1:
+	LEA	PF1+blitHe*bypl*2-2,A4
 	MOVE.W	#$8400,DMACON(A6)			; BLIT NASTY ENABLE
 	MOVE.W	#$0400,DMACON(A6)			; BLIT NASTY DISABLE
 	MOVE.L	#(((1<<12)+%100111110000)<<16)+%10,BLTCON0(A6)
@@ -208,10 +212,23 @@ __SCROLL_PF1:
 	MOVE.L	A4,BLTAPTH(A6)
 	MOVE.L	A4,BLTDPTH(A6)
 	MOVE.W	#(blitHe*2<<6)+wi/16,BLTSIZE(A6)	; BLTSIZE
+	MOVE.W	#$88,COPPER\.PFsScrolling+2
 	RTS
 
-FRAME_STROBE:	DC.B 0,0
-FRAME_COUNT:	DC.W 0
+_FRAME0:		BSR.W	__SCROLL_PF1
+		MOVE.L	#_FRAME1,FRM_NEXT_ADDR
+		RTS
+
+_FRAME1:		BSR.W	__SCROLL_PF2
+		MOVE.L	#_FRAME0,FRM_NEXT_ADDR
+		RTS
+
+;********** Fastmem Data **********
+FRM_NEXT_ADDR:	DC.L _FRAME0
+FRM_EVENTS:	DC.L _FRAME0,_FRAME1,_FRAME0,_FRAME1
+
+FRM_COUNT:	DC.W 0
+FRM_STROBE:	DC.B 0,0
 SCROLL_IDX:	DC.W 0
 AMP_LINES:	DC.W 1
 LFO_SINE1:	DC.W 7,8,10,11,12,13,13,14,14,15,13,13,12,11,10,8,7,6,4,3,2,1,1,0,1,0,1,1,2,3,4,6
@@ -240,6 +257,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
 	DC.W BPLCON2,$40	; SCROLL REGISTER (AND PLAYFIELD PRI)
+	.PFsScrolling:
 	DC.W BPLCON1,$88
 	DC.W BPL1MOD,$00	; BPL1MOD	 Bitplane modulo (odd planes)
 	DC.W BPL2MOD,$00	; BPL2MOD Bitplane modulo (even planes)

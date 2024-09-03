@@ -73,7 +73,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	;## PF1 ##
 	LEA	GFXPF1,A5		; SRC
 	LEA	PF1,A3		; DEST
-	MOVE.W	#bypl/2,D7	; FILL PF1
+	MOVE.W	#wi/16,D7		; FILL PF1
 	.pf1Loop:
 	BSR.W	__PREP_BLIT_SLICE
 	MOVE.W	#(blitHe*2<<6)+32/16,BLTSIZE(A6)
@@ -83,7 +83,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	;## PF2 ##
 	LEA	GFXPF2,A5		; SRC
 	LEA	PF2,A3		; DEST
-	MOVE.W	#bypl/2,D7	; FILL PF2
+	MOVE.W	#wi/16,D7		; FILL PF2
 	.pf2Loop:
 	BSR.W	__PREP_BLIT_SLICE
 	MOVE.W	#(blitHe*3<<6)+32/16,BLTSIZE(A6)

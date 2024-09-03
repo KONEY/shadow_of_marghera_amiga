@@ -4,13 +4,17 @@
 	INCLUDE	"custom-registers.i"
 	INCLUDE	"PhotonsMiniWrapper1.04!.s"
 ;********** Constants **********
-wi		EQU 320
+sideBleed		EQU 16*2
+scrWi		EQU 320
+wi		EQU scrWi+sideBleed
 he		EQU 256		; screen height
 bpls		EQU 6		; depth
 bypl		EQU wi/16*2	; byte-width of 1 bitplane line (40bytes)
 bwid		EQU bpls*bypl	; byte-width of 1 pixel line (all bpls)
 blitHe		EQU 128
+bysb		EQU sideBleed/16*2
 rasterST		EQU $1C
+vSlices		EQU scrWi/16
 ;*******************************
 
 ;********** Demo **********	;Demo-specific non-startup code below.
@@ -66,6 +70,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
+	;## PF1 ##
 	LEA	GFXPF1,A5		; SRC
 	LEA	PF1,A3		; DEST
 	MOVE.W	#bypl/2,D7	; FILL PF1
@@ -75,6 +80,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	LEA	2(A5),A5
 	LEA	2(A3),A3
 	DBRA	D7,.pf1Loop
+	;## PF2 ##
 	LEA	GFXPF2,A5		; SRC
 	LEA	PF2,A3		; DEST
 	MOVE.W	#bypl/2,D7	; FILL PF2
@@ -87,20 +93,20 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	; ## PRE-POSITIONINGS ##
 	ADD.L	#$2,PF1_SLICE_POS
 	ADD.L	#$2,PF2_SLICE_POS
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
-	BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
+	;BSR.W	__SCROLL_PF1
 
 	MOVE.L	#COPPER,COP1LC(A6)	; ## POINT COPPERLIST ##
 ;********************  main loop  ********************
@@ -257,7 +263,7 @@ __PREP_BLIT_SLICE:
 	MOVE.L	#$07CA0000,BLTCON0(A6)
 	MOVE.L	#$FFFF0000,BLTAFWM(A6)
 	MOVE.W	#$FFFF,BLTADAT(A6)
-	MOVE.W	#bypl-4,BLTBMOD(A6)
+	MOVE.W	#bypl-4-bysb,BLTBMOD(A6)
 	MOVE.W	#bypl-4,BLTCMOD(A6)
 	MOVE.W	#bypl-4,BLTDMOD(A6)
 	MOVE.L	A5,BLTBPTH(A6)
@@ -305,7 +311,7 @@ _FRAMEB:		BSR.W	__SCROLL_PF1
 		TST.B	PF2_SLICE_IDX
 		BNE.S	.dontReset
 		;MOVE.W	#$00F0,$DFF180
-		MOVE.B	#$20,PF2_SLICE_IDX
+		MOVE.B	#vSlices,PF2_SLICE_IDX
 		MOVE.L	#GFXPF2,PF2_SLICE_POS
 		.dontReset:
 		RTS
@@ -327,7 +333,7 @@ _FRAMED:		BSR.W	__SCROLL_PF1
 		TST.B	PF1_SLICE_IDX
 		BNE.S	.dontReset
 		MOVE.W	#$00FF,$DFF180
-		MOVE.B	#$20,PF1_SLICE_IDX
+		MOVE.B	#vSlices,PF1_SLICE_IDX
 		MOVE.L	#GFXPF1,PF1_SLICE_POS
 		.dontReset:
 		.evenFrame:			; #############
@@ -344,8 +350,8 @@ _FRAMEF:		BSR.W	__SCROLL_PF1
 		RTS
 
 ;********** Fastmem Data **********
-PF1_SLICE_IDX:	DC.B $20
-PF2_SLICE_IDX:	DC.B $20
+PF1_SLICE_IDX:	DC.B vSlices
+PF2_SLICE_IDX:	DC.B vSlices
 PF1_SLICE_POS:	DC.L GFXPF1
 PF2_SLICE_POS:	DC.L GFXPF2
 FRM_NEXT_ADDR:	DC.L _FRAME0
@@ -376,14 +382,14 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W FMODE,$0000	; Slow fetch mode, remove if AGA demo.
 	DC.W DIWSTRT,$2C81	; 238h display window top, left | DIWSTRT - 11.393
 	DC.W DIWSTOP,$1CC1	; and bottom, right.	| DIWSTOP - 11.457
-	DC.W DDFSTRT,$0038	; Standard bitplane dma fetch start
+	DC.W DDFSTRT,$0030	; Standard bitplane dma fetch start
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
 	DC.W BPLCON2,$40	; SCROLL REGISTER (AND PLAYFIELD PRI)
 	.PFsScrolling:
 	DC.W BPLCON1,$88
-	DC.W BPL1MOD,$00	; BPL1MOD	 Bitplane modulo (odd planes)
-	DC.W BPL2MOD,$00	; BPL2MOD Bitplane modulo (even planes)
+	DC.W BPL1MOD,bysb-2	; BPL1MOD	 Bitplane modulo (odd planes)
+	DC.W BPL2MOD,bysb-2	; BPL2MOD Bitplane modulo (even planes)
 
 	.Palette:
 	DC.W $0180,$0000,$0182,$0455,$0184,$0233,$0186,$0233

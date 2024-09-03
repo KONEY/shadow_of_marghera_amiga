@@ -111,6 +111,16 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 
 	JSR	__ADD_BLEED_WORDS
 
+	LEA	LFO_SINE2,A0	; ## COUPLE NYBBLES OF LFO VALUES ##
+	MOVE.W	#$1F,D0
+	.loop:
+	MOVE.W	(A0),D3
+	ROR.L	#$4,D3
+	MOVE.W	(A0),D3
+	ROL.L	#$4,D3
+	MOVE.W	D3,(A0)+
+	DBRA	D0,.loop
+
 	MOVE.L	#COPPER,COP1LC(A6)	; ## POINT COPPERLIST ##
 ;********************  main loop  ********************
 MainLoop:
@@ -164,28 +174,23 @@ _WipeMEM:		; a1=screen destination address to clear
 	RTS
 
 __RACE_THE_BEAM:
-	;LEA	LFO_SINE_AMP,A0
-	LEA	LFO_SINE2,A0
+	LEA	LFO_SINE2,A0	; NYBBLES PREVIOUSLY COUPLED
 	MOVE.W	SCROLL_IDX,D0
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
 	MOVE.W	D0,SCROLL_IDX
 	CLR.L	D2
-	;CLR.L	D7		; SYNC IDX
-	;MOVE.W	#$F,D6		; LFO NEGATIVE AMPLITUDE
-	;;MOVE.W	AMP_LINES,D6
-	;;MOVE.W	D6,D7
-	;MOVE.W	VHPOSR(A6),D4	; for bug?
-	;.waitVisibleRaster:
-	;MOVE.W	VHPOSR(A6),D4
-	;AND.W	#$FF00,D4		; read vertical beam
-	;CMP.W	#$3700,D4		; 2C
-	;BNE.S	.waitVisibleRaster
 
 	.dummyWait:
 	MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
 	BTST	#$0,D1
 	BNE.S	.dummyWait
+	LSR.L	#1,D1
+	LSR.W	#7,D1
+
+	MOVE.W	(A0,D0.W),D3	; PRELOAD INITIAL VALUES
+	ADD.W	#$2,D0
+	AND.W	#$3F-1,D0
 
 	.waitNextRaster:
 	MOVE.W	VHPOSR(A6),D2
@@ -196,15 +201,18 @@ __RACE_THE_BEAM:
 	MOVE.W	VHPOSR(A6),D4	; RACE THE BEAM!
 	AND.W	#$FF00,D4		; RACE THE BEAM!
 
-	CMP.W	#$D800,D2		; 12.032 - #$2F00
+	CMP.W	#$DF,D1
 	BLO.S	.noSyncShift
+	ANDI.B	#1,D1		; ONLY EVEN LINES
+	BEQ.S	.noSyncShift	
 
-	MOVE.W	(A0,D0.W),D3	; 19DEA68E GLITCHA
-	ROR.L	#$4,D3
-	MOVE.W	(A0,D0.W),D3	; 19DEA68E GLITCHA
-	ROL.L	#$4,D3
-
-	MOVE.W	D3,BPLCON1(A6)	; 19DEA68E GLITCHA
+	MOVE.W	D3,BPLCON1(A6)	; PRELOADED VALUES
+	MOVE.W	(A0,D0.W),D3
+	;ROR.L	#$4,D3
+	;MOVE.W	(A0,D0.W),D3
+	;ROL.L	#$4,D3
+	ADD.W	#$2,D0
+	AND.W	#$3F-1,D0
 
 	;TST.W	D7
 	;BNE.S	.notFourthLine
@@ -213,25 +221,14 @@ __RACE_THE_BEAM:
 	;ADD.W	#$1,D6
 	;MOVE.W	D6,D7		; EVERY x LINES...
 	;.notFourthLine:
-	;SUB.W	#$1,D7		; EVERY x LINES...
-
-	ADD.W	#$2,D0
-	AND.W	#$3F-1,D0
 
 	.noSyncShift:
-	;MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
-	;BTST	#$0,D1
-	;BEQ.W	.waitNextRaster
-
-	MOVE.L	VPOSR(A6),D1
+	MOVE.L	VPOSR(A6),D1	; REACH SCREEN END
 	LSR.L	#1,D1
 	LSR.W	#7,D1
-	CMP.W	#$138,D1
+	CMP.W	#$137,D1
 	BNE.W	.waitNextRaster
-
-	;CMP.W	#$1900,D2		; 12.032
-	;BLO.W	.waitNextRaster
-	MOVE.W	#$0,BPLCON1(A6)	; RESET REGISTER
+	;MOVE.W	#$0,BPLCON1(A6)	; RESET REGISTERS
 	RTS
 
 __SCROLL_PF2:
@@ -376,17 +373,10 @@ FRM_NEXT_ADDR:	DC.L _FRAME0
 FRM_COUNT:	DC.W 0
 FRM_STROBE:	DC.B 1,0
 SCROLL_IDX:	DC.W 0
-AMP_LINES:	DC.W 1
 LFO_SINE1:	DC.W 7,8,10,11,12,13,13,14,14,15,13,13,12,11,10,8,7,6,4,3,2,1,1,0,1,0,1,1,2,3,4,6
 LFO_SINE2:	DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5
+;LFO_SINE2:	DC.W (7>>4)+7,99,1010,1111,1313,1414,1414,1515,1515,1515,1414,1414,1313,1111,1010,99,77,55,44,33,11,00,00,00,00,00,00,00,11,33,44,55
 LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
-LFO_SINE_AMP:	DC.W 1,1,2,2,2,3,3,3,3,3,3,3,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1
-		DC.W 2,3,3,4,4,4,5,5,5,5,5,4,4,4,3,3,2,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1
-		DC.W 3,4,5,5,6,6,7,7,7,7,7,6,6,5,5,4,3,2,1,1,0,0,0,0,0,0,0,0,0,1,1,2
-		DC.W 4,5,6,7,8,8,9,9,9,9,9,8,8,7,6,5,4,3,2,1,0,0,0,0,0,0,0,0,0,1,2,3
-		DC.W 5,6,7,8,9,10,11,11,11,11,11,10,9,8,7,6,5,4,3,2,1,0,0,0,0,0,0,0,1,2,3,4
-		DC.W 6,7,9,10,11,12,12,13,13,13,12,12,11,10,9,7,6,5,3,2,1,0,0,0,0,0,0,0,1,2,3,5
-		DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
@@ -410,8 +400,8 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W BPL2MOD,bysb-2	; BPL2MOD Bitplane modulo (even planes)
 
 	.Palette:
-	DC.W $0180,$0000,$0182,$0455,$0184,$0233,$0186,$0233
-	DC.W $0188,$0122,$018A,$0122,$018C,$0344,$018E,$0344
+	DC.W $0180,$0000,$0182,$0455,$0184,$0223,$0186,$0223
+	DC.W $0188,$0112,$018A,$0112,$018C,$0334,$018E,$0334
 	DC.W $0190,$0000,$0192,$0333,$0194,$0344,$0196,$0555
 	DC.W $0198,$0666,$019A,$0888,$019C,$0AA9,$019E,$0EED
 
@@ -517,10 +507,12 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $D707,$FFFE
 	DC.W $182,$E62
 	DC.W $D807,$FFFE
+	DC.W $182,$E52
+
+	DC.W $E007,$FFFE
 	DC.W BPL1MOD,-1*bypl*3+2	; BPL1MOD Bitplane modulo (odd planes)
 	DC.W BPL2MOD,-1*bypl*3+2	; BPL2MOD Bitplane modulo (even planes)
-	;DC.W BPLCON0,(bpls-1)*$1000+$A00	; HAM!
-	DC.W $182,$E52
+
 	DC.W $E407,$FFFE
 	DC.W $182,$D52
 	DC.W $E507,$FFFE

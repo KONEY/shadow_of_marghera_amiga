@@ -12,6 +12,7 @@ bpls		EQU 6		; depth
 bypl		EQU wi/16*2	; byte-width of 1 bitplane line (40bytes)
 bwid		EQU bpls*bypl	; byte-width of 1 pixel line (all bpls)
 blitHe		EQU 128
+bgHe		EQU 196
 bysb		EQU sideBleed/16*2
 rasterST		EQU $1C
 vSlices		EQU scrWi/16
@@ -107,6 +108,8 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	;BSR.W	__SCROLL_PF1
 	;BSR.W	__SCROLL_PF1
 	;BSR.W	__SCROLL_PF1
+
+	JSR	__ADD_BLEED_WORDS
 
 	MOVE.L	#COPPER,COP1LC(A6)	; ## POINT COPPERLIST ##
 ;********************  main loop  ********************
@@ -271,6 +274,20 @@ __PREP_BLIT_SLICE:
 	MOVE.L	A3,BLTDPTH(A6)
 	RTS
 
+__ADD_BLEED_WORDS:
+	LEA	BGR_DATA,A0
+	LEA	BGR,A1
+	MOVE.L	#bgHe-1,D1	; LINES
+	.outerLoop:
+	MOVE.W	#$FFFF,(A1)+	; THE EXTRA WORD LEFT
+	MOVE.L	#scrWi/16-1,D0	; SIZE OF SOURCE IN WORDS
+	.innerLoop:
+	MOVE.W	(A0)+,(A1)+
+	DBRA	D0,.innerLoop
+	MOVE.W	#$FFFF,(A1)+	; THE EXTRA WORD RIGHT
+	DBRA.W	D1,.outerLoop
+	RTS
+
 _FRAME0:		BSR.W	__SCROLL_PF2
 		MOVE.L	#_FRAME1,FRM_NEXT_ADDR
 		RTS
@@ -374,21 +391,22 @@ LFO_SINE_AMP:	DC.W 1,1,2,2,2,3,3,3,3,3,3,3,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
 
-BGR:	INCBIN "BGR_320x192x1.raw"
+BGR:	DS.W bgHe*2		; DEFINE AN EMPTY AREA FOR THE BLEEDS
+BGR_DATA:	INCBIN "BGR_320x192x1.raw"
 GFXPF1:	INCBIN "PF1_320x128x2.raw"
 GFXPF2:	INCBIN "PF2_2_320x128x3.raw"
 
 COPPER:	; #### COPPERLIST ####################################################
 	DC.W FMODE,$0000	; Slow fetch mode, remove if AGA demo.
 	DC.W DIWSTRT,$2C81	; 238h display window top, left | DIWSTRT - 11.393
-	DC.W DIWSTOP,$1CC1	; and bottom, right.	| DIWSTOP - 11.457
+	DC.W DIWSTOP,$1CC1	; and bottom, right.| DIWSTOP - 11.457
 	DC.W DDFSTRT,$0030	; Standard bitplane dma fetch start
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
 	DC.W BPLCON2,$40	; SCROLL REGISTER (AND PLAYFIELD PRI)
 	.PFsScrolling:
 	DC.W BPLCON1,$88
-	DC.W BPL1MOD,bysb-2	; BPL1MOD	 Bitplane modulo (odd planes)
+	DC.W BPL1MOD,bysb-2	; BPL1MOD Bitplane modulo (odd planes)
 	DC.W BPL2MOD,bysb-2	; BPL2MOD Bitplane modulo (even planes)
 
 	.Palette:
@@ -499,8 +517,8 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $D707,$FFFE
 	DC.W $182,$E62
 	DC.W $D807,$FFFE
-	DC.W BPL1MOD,-1*bypl*3	; BPL1MOD Bitplane modulo (odd planes)
-	DC.W BPL2MOD,-1*bypl*3	; BPL2MOD Bitplane modulo (even planes)
+	DC.W BPL1MOD,-1*bypl*3+2	; BPL1MOD Bitplane modulo (odd planes)
+	DC.W BPL2MOD,-1*bypl*3+2	; BPL2MOD Bitplane modulo (even planes)
 	;DC.W BPLCON0,(bpls-1)*$1000+$A00	; HAM!
 	DC.W $182,$E52
 	DC.W $E407,$FFFE
@@ -569,7 +587,6 @@ COPPER:	; #### COPPERLIST ####################################################
 ;*******************************************************************************
 
 BLEED:		DS.B blitHe*bypl
-;BGR:		DS.B he*bypl*1
 PF1:		DS.B blitHe*bypl*2
 PF2:		DS.B blitHe*bypl*3
 

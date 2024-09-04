@@ -11,8 +11,8 @@ he		EQU 256		; screen height
 bpls		EQU 6		; depth
 bypl		EQU wi/16*2	; byte-width of 1 bitplane line (40bytes)
 bwid		EQU bpls*bypl	; byte-width of 1 pixel line (all bpls)
-blitHe		EQU 128
-bgHe		EQU 196
+blitHe		EQU 116
+bgHe		EQU 180
 bysb		EQU sideBleed/16*2
 rasterST		EQU $1C
 vSlices		EQU scrWi/16
@@ -404,10 +404,10 @@ LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
 ;*******************************************************************************
 
 BGR:	DS.W bgHe*2		; DEFINE AN EMPTY AREA FOR THE BLEEDS
-BGR_DATA:	INCBIN "BGR_320x192x1.raw"
-PF1S1:	INCBIN "PF1_320x128x2.raw"
-PF2S1:	INCBIN "PF2_320x128x3.raw"
-PF2S2:	INCBIN "PF2_2_320x128x3.raw"
+BGR_DATA:	INCBIN "BGR_320x180x1.raw"
+PF1S1:	INCBIN "PF1_320x116x2.raw"
+PF2S1:	INCBIN "PF2_320x116x3.raw"
+PF2S2:	INCBIN "PF2_2_320x116x3.raw"
 
 COPPER:	; #### COPPERLIST ####################################################
 	DC.W FMODE,$0000	; Slow fetch mode, remove if AGA demo.
@@ -468,7 +468,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $182,$003
 	DC.W $5E07,$FFFE
 
-	DC.W $6B07,$FFFE
+	DC.W $6D07,$FFFE
 	.BplPtrsBled1:
 	DC.W $E4,0,$E6,0	; 2
 	DC.W $E8,0,$EA,0	; 1

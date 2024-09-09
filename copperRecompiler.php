@@ -102,8 +102,6 @@ $copperLines='
 	DC.W $EC,0,$EE,0
 	DC.W $F0,0,$F2,0
 	DC.W $F4,0,$F6,0
-	DC.W BPL1MOD,bysb-2
-	DC.W BPL2MOD,bysb-2
 
 	DC.W $FFFF,$FFFE';
 	$copStart='2C';

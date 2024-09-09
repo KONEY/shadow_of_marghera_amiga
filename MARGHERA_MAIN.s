@@ -57,7 +57,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	LEA	16(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
-	LEA	BLEED,A0
+	LEA	BLEED+blitHe*bypl-bypl,A0
 	LEA	COPPER\.BplPtrsBled2+2,A1	
 	BSR.W	PokePtrs
 	LEA	8(A1),A1		; -8 bytes on .exe!
@@ -463,10 +463,8 @@ COPPER:	; #### COPPERLIST ####################################################
 	;DC.W $EC,0,$EE,0	; 2
 	;DC.W $F0,0,$F2,0	; 1
 	;DC.W $F4,0,$F6,0	; 2
-	;DC.W BPL1MOD,bysb-2		; BPL1MOD Bitplane modulo (odd planes)
-	;DC.W BPL2MOD,bysb-2		; BPL2MOD Bitplane modulo (even planes)
-;
-	;DC.W $FFFF,$FFFE ; END COPPER LIST
+
+	DC.W $FFFF,$FFFE ; END COPPER LIST
 
 ;*******************************************************************************
 	SECTION ChipBuffers,BSS_C	;BSS doesn't count toward exe size

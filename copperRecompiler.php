@@ -1,135 +1,112 @@
 <?php
 ## KONEY 2024 ## DEFRAG COPPERLISTS!
+## ; https://gradient-blaster.grahambates.com/?points=013@0,113@34,213@62,313@84,413@104,513@120,613@131,713@141,813@150,923@158,b33@165,e73@175,e73@182,403@213,003@238&steps=256&blendMode=linear&ditherMode=orderedMono&target=amigaOcs&ditherAmount=12
 $copperLines='
-	dc.w $2b07,$fffe
-	dc.w $180,$f00
-	dc.w $3b07,$fffe
-	dc.w $180,$e01
+	dc.w $2c07,$fffe
+	dc.w $182,$013
 	dc.w $4b07,$fffe
-	dc.w $180,$d02
-	dc.w $5b07,$fffe
-	dc.w $180,$c03
-	dc.w $6b07,$fffe
-	dc.w $180,$b04
-	dc.w $7b07,$fffe
-	dc.w $180,$a05
-	dc.w $8b07,$fffe
-	dc.w $180,$906
-	dc.w $9b07,$fffe
-	dc.w $180,$807
+	dc.w $182,$113
+	dc.w $6607,$fffe
+	dc.w $182,$213
+	dc.w $7c07,$fffe
+	dc.w $182,$313
+	dc.w $8f07,$fffe
+	dc.w $182,$413
+	dc.w $9f07,$fffe
+	dc.w $182,$513
 	dc.w $ab07,$fffe
-	dc.w $180,$708
-	dc.w $bb07,$fffe
-	dc.w $180,$609
-	dc.w $cb07,$fffe
-	dc.w $180,$50a
-	dc.w $db07,$fffe
-	dc.w $180,$30c
-
-	.BplPtrsBleed:
-	DC.W $E4,0,$E6,0	; 2 comment
-	dc.w $e8,0,$ea,0	; 1
-	dc.W $EC,0,$EE,0	; 2
-	DC.W $F0,0,$F2,0	; 1
-	DC.w $F4,0,$F6,0	; 2
-
-	Dc.w BPL1MOD,-1*bypl*3	; BPL1MOD Bitplane modulo (odd planes)
-	DC.W BPL2MOD,-1*bypl*3	; BPL2MOD Bitplane modulo (even planes)
-
-	dc.w $eb07,$fffe
-	dc.w $180,$30c
-	dc.w $fb07,$fffe
-	dc.w $180,$20d
-	dc.w $ffdf,$fffe
-	dc.w $b07,$fffe
-	dc.w $180,$10e
-	dc.w $1b07,$fffe
-	DC.W $180,$00F
-	dc.w $ffff,$fffe	
-
-	DC.W $6B07,$FFFE
-
-	DC.W $3007,$FFFE
-	dc.w $18c,$0cf
-	dc.w $6a07,$fffe
-	dc.w $18c,$0df
-	dc.w $7607,$fffe
-	dc.w $18c,$0de
-	dc.w $8907,$fffe
-	dc.w $18c,$0dd
-	dc.w $9a07,$fffe
-	dc.w $18c,$0ec
-	dc.w $aa07,$fffe
-	dc.w $18c,$0eb
-	dc.w $b807,$fffe
-	dc.w $18c,$0ea
-	dc.w $c507,$fffe
-	dc.w $18c,$0e9
+	dc.w $182,$613
+	dc.w $b507,$fffe
+	dc.w $182,$713
+	dc.w $be07,$fffe
+	dc.w $182,$813
+	dc.w $c607,$fffe
+	dc.w $182,$913
+	dc.w $c907,$fffe
+	dc.w $182,$923
 	dc.w $cc07,$fffe
-	dc.w $18c,$0f9
-	dc.w $d107,$fffe
-	dc.w $18c,$0f8
-
-	dc.w $da07,$fffe
-	dc.w $18c,$0f7
-	dc.w $e307,$fffe
-	dc.w $18c,$0f6
-	dc.w $ea07,$fffe
-	dc.w $18c,$0f5
-	dc.w $eb07,$fffe
-	dc.w $18c,$1f5
-	dc.w $ef07,$fffe
-	dc.w $18c,$1f4
-	dc.w $f407,$fffe
-	dc.w $18c,$1f3
-	dc.w $f707,$fffe
-	dc.w $18c,$1f2
-	dc.w $f907,$fffe
-	dc.w $18c,$1f1
-	dc.w $fb07,$fffe
-	dc.w $18c,$1f0
-	dc.w $18A,$fff
-	dc.w $ffdf,$fffe
-	dc.w $ffff,$fffe
-	dc.w $2b07,$fffe
-	dc.w $188,$00f
-	dc.w $5307,$fffe
-	dc.w $188,$10f
-	dc.w $6307,$fffe
-	dc.w $188,$20f
-	dc.w $6d07,$fffe
-	dc.w $188,$30f
-	dc.w $8707,$fffe
-	dc.w $188,$40f
-	dc.w $9607,$fffe
-	dc.w $188,$50f
-	dc.w $a007,$fffe
-	dc.w $188,$60f
-	dc.w $a907,$fffe
-	dc.w $188,$70f
-	dc.w $b407,$fffe
-	dc.w $188,$80f
-	dc.w $c007,$fffe
-	dc.w $188,$90f
-	dc.w $ce07,$fffe
-	dc.w $188,$a0f
+	dc.w $182,$a23
 	dc.w $cf07,$fffe
-	dc.w $188,$90f
+	dc.w $182,$b23
 	dc.w $d007,$fffe
-	dc.w $188,$a0f
-	dc.w $dd07,$fffe
-	dc.w $188,$b0f
-	dc.w $ec07,$fffe
-	dc.w $188,$c0f
+	dc.w $182,$b33
+	dc.w $d207,$fffe
+	dc.w $182,$c33
+	dc.w $d307,$fffe
+	dc.w $182,$c43
+	dc.w $d507,$fffe
+	dc.w $182,$d43
+	dc.w $d607,$fffe
+	dc.w $182,$d53
+	dc.w $d807,$fffe
+	dc.w $182,$e63
+	dc.w $da07,$fffe
+	dc.w $182,$e73
+	dc.w $e507,$fffe
+	dc.w $182,$d63
+	dc.w $e807,$fffe
+	dc.w $182,$c63
+	dc.w $e907,$fffe
+	dc.w $182,$c53
+	dc.w $eb07,$fffe
+	dc.w $182,$b53
+	dc.w $ed07,$fffe
+	dc.w $182,$b43
+	dc.w $ee07,$fffe
+	dc.w $182,$a43
+	dc.w $f107,$fffe
+	dc.w $182,$933
+	dc.w $f407,$fffe
+	dc.w $182,$833
+	dc.w $f507,$fffe
+	dc.w $182,$823
+	dc.w $f707,$fffe
+	dc.w $182,$723
+	dc.w $f907,$fffe
+	dc.w $182,$713
 	dc.w $fa07,$fffe
-	dc.w $188,$d0f
+	dc.w $182,$613
+	dc.w $fd07,$fffe
+	dc.w $182,$503
+	dc.w $ff07,$fffe
+	dc.w $182,$403
 	dc.w $ffdf,$fffe
-	dc.w $a07,$fffe
-	dc.w $188,$e0f
-	dc.w $1a07,$fffe
-	dc.w $188,$f0f
-	dc.w $ffff,$fffe';
-	$copStart='2b';
+	dc.w $307,$fffe
+	dc.w $182,$303
+	dc.w $907,$fffe
+	dc.w $182,$203
+	dc.w $f07,$fffe
+	dc.w $182,$103
+	dc.w $1507,$fffe
+	dc.w $182,$003
+
+	DC.W $6D07,$FFFE
+	.BplPtrsBled1:
+	DC.W $E4,0,$E6,0
+	DC.W $E8,0,$EA,0
+	DC.W $EC,0,$EE,0
+	DC.W $F0,0,$F2,0
+	DC.W $F4,0,$F6,0
+
+	DC.W $E007,$FFFE
+	DC.W BPL1MOD,-1*bypl*3+2
+	DC.W BPL2MOD,-1*bypl*3+2
+
+	DC.W $FFDF,$FFFE
+
+	DC.W $1A07,$FFFE
+	.BplPtrsBled2:
+	DC.W $E0,0,$E2,0
+	DC.W $E4,0,$E6,0
+	DC.W $E8,0,$EA,0
+	DC.W $EC,0,$EE,0
+	DC.W $F0,0,$F2,0
+	DC.W $F4,0,$F6,0
+	DC.W BPL1MOD,bysb-2
+	DC.W BPL2MOD,bysb-2
+
+	DC.W $FFFF,$FFFE';
+	$copStart='2C';
 	$copperList=[];
 	$lineIDX=0;
 	$copperLines=explode("\n", $copperLines);
@@ -165,7 +142,7 @@ $copperLines='
 	//print_r($copperList);	exit;
 	#######################################
 	error_reporting(E_ERROR);
-	echo "\n".'	.Waits:';
+	//echo "\n".'	.Waits:';
 	for($i=hexdec($copStart); $i<hexdec('ff'); $i++){
 		if(!array_key_exists($i, $copperList)){	continue;	}
 		extractCopLines($i,$copperList[$i]);
@@ -176,8 +153,8 @@ $copperLines='
 		if(!array_key_exists($i, $copperList)){	continue;	}
 		extractCopLines($i,$copperList[$i]);
 	}
-	echo "\n".'	DC.W $FFFF,$FFFE';
-	echo '	; # END COPPER LIST';
+	//echo "\n".'	DC.W $FFFF,$FFFE';
+	//echo '	; # END COPPER LIST';
 
 	function extractCopLines($wait,$element){
 		GLOBAL $totLines,$copStart;
@@ -198,4 +175,3 @@ $copperLines='
 	}
 	//echo " (".count($copperLines)." | ". count($copperList). ")";
 ?>
-

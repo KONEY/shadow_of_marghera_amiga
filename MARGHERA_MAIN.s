@@ -57,7 +57,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	LEA	16(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
-	LEA	BLEED+blitHe*bypl+bypl,A0
+	LEA	BLEED,A0
 	LEA	COPPER\.BplPtrsBled2+2,A1	
 	BSR.W	PokePtrs
 	LEA	8(A1),A1		; -8 bytes on .exe!
@@ -94,20 +94,6 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	; ## PRE-POSITIONINGS ##
 	ADD.L	#$2,PF1_SLICE_POS
 	ADD.L	#$2,PF2_SLICE_POS
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
-	;BSR.W	__SCROLL_PF1
 
 	JSR	__ADD_BLEED_WORDS
 
@@ -226,7 +212,7 @@ __RACE_THE_BEAM:
 	MOVE.L	VPOSR(A6),D1	; REACH SCREEN END
 	LSR.L	#$1,D1
 	LSR.W	#$7,D1
-	CMP.W	#$137,D1
+	CMP.W	#$120,D1
 	BNE.W	.waitNextRaster
 	;MOVE.W	#$0,BPLCON1(A6)	; RESET REGISTERS
 	RTS
@@ -413,6 +399,7 @@ PF2S1:	INCBIN "PF2-1_320x116x3.raw"
 PF2S2:	INCBIN "PF2-2_320x116x3.raw"
 PF2S3:	INCBIN "PF2-3_320x116x3.raw"
 PF2S4:	INCBIN "PF2-4_320x116x3.raw"
+;PF2S5:	INCBIN "PF2-5_320x116x3.raw"
 
 COPPER:	; #### COPPERLIST ####################################################
 	DC.W FMODE,$0000	; Slow fetch mode, remove if AGA demo.
@@ -453,154 +440,33 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W BPLCON0,bpls*$1000+$600	;enable bitplanes
 
 	.Waits:
-	DC.W $2B07,$FFFE
-	DC.W $182,$012
-	DC.W $4207,$FFFE
-	DC.W $182,$013
-	DC.W $4307,$FFFE
-	DC.W $182,$012
-	DC.W $4407,$FFFE
-	DC.W $182,$013
-	DC.W $4F07,$FFFE
-	DC.W $182,$003
-	DC.W $5007,$FFFE
-	DC.W $182,$013
-	DC.W $5307,$FFFE
-	DC.W $182,$003
-	DC.W $5507,$FFFE
-	DC.W $182,$013
-	DC.W $5607,$FFFE
-	DC.W $182,$003
-	DC.W $5E07,$FFFE
+	INCLUDE "cop.i"
+	;DC.W $6D07,$FFFE
+	;.BplPtrsBled1:
+	;DC.W $E4,0,$E6,0	; 2
+	;DC.W $E8,0,$EA,0	; 1
+	;DC.W $EC,0,$EE,0	; 2
+	;DC.W $F0,0,$F2,0	; 1
+	;DC.W $F4,0,$F6,0	; 2	;full 6 ptrs, in case you increase bpls
 
-	DC.W $6D07,$FFFE
-	.BplPtrsBled1:
-	DC.W $E4,0,$E6,0	; 2
-	DC.W $E8,0,$EA,0	; 1
-	DC.W $EC,0,$EE,0	; 2
-	DC.W $F0,0,$F2,0	; 1
-	DC.W $F4,0,$F6,0	; 2	;full 6 ptrs, in case you increase bpls
+	;DC.W $E007,$FFFE
+	;DC.W BPL1MOD,-1*bypl*3+2	; BPL1MOD Bitplane modulo (odd planes)
+	;DC.W BPL2MOD,-1*bypl*3+2	; BPL2MOD Bitplane modulo (even planes)
 
-	DC.W $182,$103
-	DC.W $7207,$FFFE
-	DC.W $182,$203
-	DC.W $8607,$FFFE
-	DC.W $182,$303
-	DC.W $8707,$FFFE
-	DC.W $182,$203
-	DC.W $8807,$FFFE
-	DC.W $182,$303
-	DC.W $9A07,$FFFE
-	DC.W $182,$403
-	DC.W $9B07,$FFFE
-	DC.W $182,$303
-	DC.W $9C07,$FFFE
-	DC.W $182,$403
-	DC.W $A407,$FFFE
-	DC.W $182,$503
-	DC.W $A807,$FFFE
-	DC.W $182,$513
-	DC.W $A907,$FFFE
-	DC.W $182,$613
-	DC.W $AE07,$FFFE
-	DC.W $182,$713
-	DC.W $AF07,$FFFE
-	DC.W $182,$723
-	DC.W $B307,$FFFE
-	DC.W $182,$823
-	DC.W $B707,$FFFE
-	DC.W $182,$833
-	DC.W $B807,$FFFE
-	DC.W $182,$933
-	DC.W $BD07,$FFFE
-	DC.W $182,$A33
-	DC.W $BF07,$FFFE
-	DC.W $182,$A43
-	DC.W $C207,$FFFE
-	DC.W $182,$B43
-	DC.W $C607,$FFFE
-	DC.W $182,$B53
-	DC.W $C707,$FFFE
-	DC.W $182,$C53
-	DC.W $CC07,$FFFE
-	DC.W $182,$D53
-	DC.W $CD07,$FFFE
-	DC.W $182,$D63
-	DC.W $D207,$FFFE
-	DC.W $182,$E63
-	DC.W $D407,$FFFE
-	DC.W $182,$E62
-	DC.W $D607,$FFFE
-	DC.W $182,$E52
-	DC.W $D707,$FFFE
-	DC.W $182,$E62
-	DC.W $D807,$FFFE
-	DC.W $182,$E52
+	;DC.W $FFDF,$FFFE ; PAL FIX
 
-	DC.W $E007,$FFFE
-	DC.W BPL1MOD,-1*bypl*3+2	; BPL1MOD Bitplane modulo (odd planes)
-	DC.W BPL2MOD,-1*bypl*3+2	; BPL2MOD Bitplane modulo (even planes)
-
-	DC.W $E407,$FFFE
-	DC.W $182,$D52
-	DC.W $E507,$FFFE
-	DC.W $182,$D42
-	DC.W $E807,$FFFE
-	DC.W $182,$C42
-	DC.W $EB07,$FFFE
-	DC.W $182,$B42
-	DC.W $EF07,$FFFE
-	DC.W $182,$A42
-	DC.W $F207,$FFFE
-	DC.W $182,$A32
-	DC.W $F307,$FFFE
-	DC.W $182,$932
-	DC.W $F607,$FFFE
-	DC.W $182,$832
-	DC.W $F907,$FFFE
-	DC.W $182,$732
-	DC.W $FD07,$FFFE
-	DC.W $182,$632
-	DC.W $FE07,$FFFE
-	DC.W $182,$622
-	DC.W $FFDF,$FFFE ; PAL FIX
-	DC.W $107,$FFFE
-	DC.W $182,$522
-	DC.W $507,$FFFE
-	DC.W $182,$422
-	DC.W $807,$FFFE
-	DC.W $182,$322
-	DC.W $B07,$FFFE
-	DC.W $182,$312
-	DC.W $C07,$FFFE
-	DC.W $182,$212
-	DC.W $D07,$FFFE
-
-	.BplPtrsBled2:
-	DC.W $E0,0,$E2,0	; 1
-	DC.W $E4,0,$E6,0	; 2
-	DC.W $E8,0,$EA,0	; 1
-	DC.W $EC,0,$EE,0	; 2
-	DC.W $F0,0,$F2,0	; 1
-	DC.W $F4,0,$F6,0	; 2
-
-	DC.W $1007,$FFFE
-	DC.W $182,$112
-	DC.W $1307,$FFFE
-	DC.W $182,$012
-	DC.W $1907,$FFFE
-	DC.W $182,$011
-	DC.W $1A07,$FFFE
-	DC.W $182,$012
-	DC.W $1B07,$FFFE
-	DC.W $182,$011
-	DC.W $2707,$FFFE
-	DC.W $182,$111
-	DC.W $2807,$FFFE
-	DC.W $182,$011
-	DC.W $2907,$FFFE
-	DC.W $182,$111
-	DC.W $FFFF,$FFFE ; END COPPER LIST
+	;DC.W $1A07,$FFFE
+	;.BplPtrsBled2:
+	;DC.W $E0,0,$E2,0	; 1
+	;DC.W $E4,0,$E6,0	; 2
+	;DC.W $E8,0,$EA,0	; 1
+	;DC.W $EC,0,$EE,0	; 2
+	;DC.W $F0,0,$F2,0	; 1
+	;DC.W $F4,0,$F6,0	; 2
+	;DC.W BPL1MOD,bysb-2		; BPL1MOD Bitplane modulo (odd planes)
+	;DC.W BPL2MOD,bysb-2		; BPL2MOD Bitplane modulo (even planes)
+;
+	;DC.W $FFFF,$FFFE ; END COPPER LIST
 
 ;*******************************************************************************
 	SECTION ChipBuffers,BSS_C	;BSS doesn't count toward exe size

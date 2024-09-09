@@ -1,117 +1,100 @@
 
-	.Waits:
-	DC.W $2B07,$FFFE	; # Wait LN 0
-	DC.W $0180,$0F00,$0188,$000F
-	DC.W $3007,$FFFE	; # Wait
-	DC.W $018C,$00CF
-	DC.W $3B07,$FFFE	; # Wait LN 16
-	DC.W $0180,$0E01
-	DC.W $4B07,$FFFE	; # Wait LN 32
-	DC.W $0180,$0D02
-	DC.W $5307,$FFFE	; # Wait LN 40
-	DC.W $0188,$010F
-	DC.W $5B07,$FFFE	; # Wait LN 48
-	DC.W $0180,$0C03
-	DC.W $6307,$FFFE	; # Wait LN 56
-	DC.W $0188,$020F
-	DC.W $6A07,$FFFE	; # Wait
-	DC.W $018C,$00DF
-	DC.W $6B07,$FFFE	; # Wait LN 64
-	DC.W $0180,$0B04
-	
+	DC.W $2C07,$FFFE	; # Wait LN 0
+	DC.W $0182,$0013
+	DC.W $4B07,$FFFE	; # Wait
+	DC.W $0182,$0113
+	DC.W $6607,$FFFE	; # Wait
+	DC.W $0182,$0213
 	DC.W $6D07,$FFFE	; # Wait
-	DC.W $0188,$030F
-	DC.W $7607,$FFFE	; # Wait
-	DC.W $018C,$00DE
-	DC.W $7B07,$FFFE	; # Wait LN 80
-	DC.W $0180,$0A05
-	DC.W $8707,$FFFE	; # Wait
-	DC.W $0188,$040F
-	DC.W $8907,$FFFE	; # Wait
-	DC.W $018C,$00DD
-	DC.W $8B07,$FFFE	; # Wait LN 96
-	DC.W $0180,$0906
-	DC.W $9607,$FFFE	; # Wait
-	DC.W $0188,$050F
-	DC.W $9A07,$FFFE	; # Wait
-	DC.W $018C,$00EC
-	DC.W $9B07,$FFFE	; # Wait LN 112
-	DC.W $0180,$0807
-	DC.W $A007,$FFFE	; # Wait
-	DC.W $0188,$060F
-	DC.W $A907,$FFFE	; # Wait
-	DC.W $0188,$070F
-	DC.W $AA07,$FFFE	; # Wait
-	DC.W $018C,$00EB
-	DC.W $AB07,$FFFE	; # Wait LN 128
-	DC.W $0180,$0708
-	DC.W $B407,$FFFE	; # Wait
-	DC.W $0188,$080F
-	DC.W $B807,$FFFE	; # Wait
-	DC.W $018C,$00EA
-	DC.W $BB07,$FFFE	; # Wait LN 144
-	DC.W $0180,$0609
-	DC.W $C007,$FFFE	; # Wait
-	DC.W $0188,$090F
-	DC.W $C507,$FFFE	; # Wait
-	DC.W $018C,$00E9
-	DC.W $CB07,$FFFE	; # Wait LN 160
-	DC.W $0180,$050A
-	DC.W $CC07,$FFFE	; # Wait
-	DC.W $018C,$00F9
-	DC.W $CE07,$FFFE	; # Wait
-	DC.W $0188,$0A0F
+	.BplPtrsBled1:
+	DC.W $E4,0,$E6,0
+	DC.W $E8,0,$EA,0
+	DC.W $EC,0,$EE,0
+	DC.W $F0,0,$F2,0
+	DC.W $F4,0,$F6,0
+	
+	DC.W $7C07,$FFFE	; # Wait LN 80
+	DC.W $0182,$0313
+	DC.W $8F07,$FFFE	; # Wait
+	DC.W $0182,$0413
+	DC.W $9F07,$FFFE	; # Wait
+	DC.W $0182,$0513
+	DC.W $AB07,$FFFE	; # Wait
+	DC.W $0182,$0613
+	DC.W $B507,$FFFE	; # Wait
+	DC.W $0182,$0713
+	DC.W $BE07,$FFFE	; # Wait
+	DC.W $0182,$0813
+	DC.W $C607,$FFFE	; # Wait
+	DC.W $0182,$0913
+	DC.W $C907,$FFFE	; # Wait
+	DC.W $0182,$0923
+	DC.W $CC07,$FFFE	; # Wait LN 160
+	DC.W $0182,$0A23
 	DC.W $CF07,$FFFE	; # Wait
-	DC.W $0188,$090F
+	DC.W $0182,$0B23
 	DC.W $D007,$FFFE	; # Wait
-	DC.W $0188,$0A0F
-	DC.W $D107,$FFFE	; # Wait
-	DC.W $018C,$00F8
-	
+	DC.W $0182,$0B33
+	DC.W $D207,$FFFE	; # Wait
+	DC.W $0182,$0C33
+	DC.W $D307,$FFFE	; # Wait
+	DC.W $0182,$0C43
+	DC.W $D507,$FFFE	; # Wait
+	DC.W $0182,$0D43
+	DC.W $D607,$FFFE	; # Wait
+	DC.W $0182,$0D53
+	DC.W $D807,$FFFE	; # Wait
+	DC.W $0182,$0E63
 	DC.W $DA07,$FFFE	; # Wait
-	DC.W $018C,$00F7
-	DC.W $DB07,$FFFE	; # Wait LN 176
-	DC.W $0180,$030C
+	DC.W $0182,$0E73
+	DC.W $E007,$FFFE	; # Wait
+	DC.W BPL1MOD,-1*bypl*3+2
+	DC.W BPL2MOD,-1*bypl*3+2
 	
-	.BplPtrsBleed:
-	DC.W $E4,0,$E6,0	; 2 COMMENT
-	DC.W $E8,0,$EA,0	; 1
-	DC.W $EC,0,$EE,0	; 2
-	DC.W $F0,0,$F2,0	; 1
-	DC.W $F4,0,$F6,0	; 2
-	
-	DC.W BPL1MOD,-1*bypl*3	; BPL1MOD Bitplane modulo (odd planes)
-	DC.W BPL2MOD,-1*bypl*3	; BPL2MOD Bitplane modulo (even planes)
-	
-	DC.W $DD07,$FFFE	; # Wait
-	DC.W $0188,$0B0F
-	DC.W $E307,$FFFE	; # Wait LN 184
-	DC.W $018C,$00F6
-	DC.W $EA07,$FFFE	; # Wait
-	DC.W $018C,$00F5
-	DC.W $EB07,$FFFE	; # Wait LN 192
-	DC.W $0180,$030C,$018C,$01F5
-	DC.W $EC07,$FFFE	; # Wait
-	DC.W $0188,$0C0F
-	DC.W $EF07,$FFFE	; # Wait
-	DC.W $018C,$01F4
-	DC.W $F407,$FFFE	; # Wait
-	DC.W $018C,$01F3
+	DC.W $E507,$FFFE	; # Wait
+	DC.W $0182,$0D63
+	DC.W $E807,$FFFE	; # Wait
+	DC.W $0182,$0C63
+	DC.W $E907,$FFFE	; # Wait
+	DC.W $0182,$0C53
+	DC.W $EB07,$FFFE	; # Wait
+	DC.W $0182,$0B53
+	DC.W $ED07,$FFFE	; # Wait
+	DC.W $0182,$0B43
+	DC.W $EE07,$FFFE	; # Wait
+	DC.W $0182,$0A43
+	DC.W $F107,$FFFE	; # Wait
+	DC.W $0182,$0933
+	DC.W $F407,$FFFE	; # Wait LN 200
+	DC.W $0182,$0833
+	DC.W $F507,$FFFE	; # Wait
+	DC.W $0182,$0823
 	DC.W $F707,$FFFE	; # Wait
-	DC.W $018C,$01F2
+	DC.W $0182,$0723
 	DC.W $F907,$FFFE	; # Wait
-	DC.W $018C,$01F1
+	DC.W $0182,$0713
 	DC.W $FA07,$FFFE	; # Wait
-	DC.W $0188,$0D0F
-	DC.W $FB07,$FFFE	; # Wait LN 208
-	DC.W $0180,$020D,$018C,$01F0,$018A,$0FFF
+	DC.W $0182,$0613
+	DC.W $FD07,$FFFE	; # Wait
+	DC.W $0182,$0503
 	DC.W $FFDF,$FFFE	; # PAL FIX
-	DC.W $0A07,$FFFE	; # Wait
-	DC.W $0188,$0E0F
-	DC.W $0B07,$FFFE	; # Wait
-	DC.W $0180,$010E
+	DC.W $0307,$FFFE	; # Wait
+	DC.W $0182,$0303
+	DC.W $0907,$FFFE	; # Wait
+	DC.W $0182,$0203
+	DC.W $0F07,$FFFE	; # Wait
+	DC.W $0182,$0103
+	DC.W $1507,$FFFE	; # Wait
+	DC.W $0182,$0003
+	
 	DC.W $1A07,$FFFE	; # Wait
-	DC.W $0188,$0F0F
-	DC.W $1B07,$FFFE	; # Wait
-	DC.W $0180,$000F
-	DC.W $FFFF,$FFFE	; # END COPPER LIST
+	.BplPtrsBled2:
+	DC.W $E0,0,$E2,0
+	DC.W $E4,0,$E6,0
+	DC.W $E8,0,$EA,0
+	DC.W $EC,0,$EE,0
+	DC.W $F0,0,$F2,0
+	DC.W $F4,0,$F6,0
+	DC.W BPL1MOD,bysb-2
+	DC.W BPL2MOD,bysb-2
+	

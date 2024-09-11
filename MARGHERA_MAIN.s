@@ -24,7 +24,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	MOVE.L	#VBint,$6C(A4)
 	MOVE.W	#$C020,INTENA(A6)
 	MOVE.W	#$87E0,DMACON(A6)
-	;*--- start copper ---*
+
 	LEA	BGR,A0
 	LEA	COPPER\.BplPtrs+2,A1
 	BSR.W	PokePtrs
@@ -71,11 +71,11 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
-	LEA	SPRITE1,A0
-	LEA	COPPER\.SpritePointers+2+16,A1
+	LEA	SPRTKNY,A0
+	LEA	COPPER\.SpritePointers+2,A1
 	BSR.W	PokePtrs
-	LEA	SPRITE2,A0
-	LEA	COPPER\.SpritePointers+2+24,A1
+	LEA	SPRT2,A0
+	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
 	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
@@ -115,6 +115,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	MOVE.W	D3,(A0)+
 	DBRA	D0,.loop
 
+	;*--- start copper ---*
 	MOVE.L	#COPPER,COP1LC(A6)	; ## POINT COPPERLIST ##
 ;********************  main loop  ********************
 MainLoop:
@@ -129,6 +130,8 @@ MainLoop:
 	;LEA	PF2+bypl-4,A3	; DEST
 	;BSR.W	__PREP_BLIT_SLICE
 	;MOVE.W	#(blitHe*3<<6)+32/16,BLTSIZE(A6)
+
+	INCLUDE "joySpriteCtrl.i"
 
 	;*--- main loop end ---*
 	BTST	#$6,$BFE001	; POTINP - LMB pressed?
@@ -397,41 +400,19 @@ LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
 
-SPRITE1:	DC.B $06,$CD,$06+$F+$1,%00000110
-	DC.W $F83F,$FFFF
-	DC.W $843F,$FFFF
-	DC.W $8230,$FFFF
-	DC.W $9220,$FFFF
-	DC.W $9227,$FFFF
-	DC.W $9227,$FFFF
-	DC.W $9221,$FFFF
-	DC.W $8220,$FFFF
-	DC.W $87BC,$FFFF
-	DC.W $FFBC,$FFFF
-	DC.W $063C,$FFFF
-	DC.W $0720,$FFFF
-	DC.W $0721,$FFFF
-	DC.W $063F,$FFFF
-	DC.W $07BF,$FFFF
-	DC.W $0780,$FFFF
+SPRTKNY:	DC.B $06,$CD,$06+$F+1,%00000110	; VSTART $2C-$F2 | HSTART $44 | VSTOP | CTRLBITS
+	DC.W $E00E,$E00E,$E00E,$E00E,$E00E,$E00E
+	DC.W $E070,$E070,$E070,$E070,$E070,$E070
+	DC.W $FF80,$FF80,$FF80,$FF80,$FF80,$FF80
+	DC.W $FC70,$FC70,$FC70,$FC70,$FC70,$FC70
+	DC.W $FC0E,$FC0E,$FC0E,$FC0E,$FC0E,$FC0E
 	DC.L 0
-SPRITE2:	DC.B $06,$D5,$06+$F+$1,%00000110
-	DC.W $6000,$FFFF
-	DC.W $6000,$FFFF
-	DC.W $003F,$FFFF
-	DC.W $003F,$FFFF
-	DC.W $7FF0,$FFFF
-	DC.W $6070,$FFFF
-	DC.W $603C,$FFFF
-	DC.W $623C,$FFFF
-	DC.W $6070,$FFFF
-	DC.W $6070,$FFFF
-	DC.W $603F,$FFFF
-	DC.W $623F,$FFFF
-	DC.W $6220,$FFFF
-	DC.W $6220,$FFFF
-	DC.W $7FE0,$FFFF
-	DC.W $6000,$FFFF
+SPRT2:	DC.B $2C,$40,$2C+$F+1,%00000000	; VSTART $2C-$F2 | HSTART $44 | VSTOP | CTRLBITS
+	DC.W $E00E,$E00E,$E00E,$E00E,$E00E,$E00E
+	DC.W $E070,$E070,$E070,$E070,$E070,$E070
+	DC.W $FF80,$FF80,$FF80,$FF80,$FF80,$FF80
+	DC.W $FC70,$FC70,$FC70,$FC70,$FC70,$FC70
+	DC.W $FC0E,$FC0E,$FC0E,$FC0E,$FC0E,$FC0E
 	DC.L 0
 
 BGR:	DS.W bgHe*2		; DEFINE AN EMPTY AREA FOR THE BLEEDS
@@ -453,7 +434,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W DDFSTRT,$0030	; Standard bitplane dma fetch start
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
-	DC.W BPLCON2,$40	; SCROLL REGISTER (AND PLAYFIELD PRI)
+	DC.W BPLCON2,%01000001 ; SCROLL REGISTER (AND PLAYFIELD PRI)
 	.PFsScrolling:
 	DC.W BPLCON1,$88
 	DC.W BPL1MOD,bysb-2	; BPL1MOD Bitplane modulo (odd planes)

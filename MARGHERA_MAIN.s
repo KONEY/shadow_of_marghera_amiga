@@ -70,6 +70,14 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	BSR.W	PokePtrs
 	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
+
+	LEA	SPRITE1,A0
+	LEA	COPPER\.SpritePointers+2+16,A1
+	BSR.W	PokePtrs
+	LEA	SPRITE2,A0
+	LEA	COPPER\.SpritePointers+2+24,A1
+	BSR.W	PokePtrs
+
 	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
 	;## PF1 ##
 	MOVE.L	PF1_SLICE_POS,A5	; SRC
@@ -388,6 +396,43 @@ LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
+
+SPRITE1:	DC.B $06,$CD,$06+$F+$1,%00000110
+	DC.W $F83F,$FFFF
+	DC.W $843F,$FFFF
+	DC.W $8230,$FFFF
+	DC.W $9220,$FFFF
+	DC.W $9227,$FFFF
+	DC.W $9227,$FFFF
+	DC.W $9221,$FFFF
+	DC.W $8220,$FFFF
+	DC.W $87BC,$FFFF
+	DC.W $FFBC,$FFFF
+	DC.W $063C,$FFFF
+	DC.W $0720,$FFFF
+	DC.W $0721,$FFFF
+	DC.W $063F,$FFFF
+	DC.W $07BF,$FFFF
+	DC.W $0780,$FFFF
+	DC.L 0
+SPRITE2:	DC.B $06,$D5,$06+$F+$1,%00000110
+	DC.W $6000,$FFFF
+	DC.W $6000,$FFFF
+	DC.W $003F,$FFFF
+	DC.W $003F,$FFFF
+	DC.W $7FF0,$FFFF
+	DC.W $6070,$FFFF
+	DC.W $603C,$FFFF
+	DC.W $623C,$FFFF
+	DC.W $6070,$FFFF
+	DC.W $6070,$FFFF
+	DC.W $603F,$FFFF
+	DC.W $623F,$FFFF
+	DC.W $6220,$FFFF
+	DC.W $6220,$FFFF
+	DC.W $7FE0,$FFFF
+	DC.W $6000,$FFFF
+	DC.L 0
 
 BGR:	DS.W bgHe*2		; DEFINE AN EMPTY AREA FOR THE BLEEDS
 BGR_DATA:	INCBIN "BGR_320x180x1.raw"

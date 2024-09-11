@@ -44,3 +44,8 @@
 	.notFireL:
 	SUB.B	#$1,1(A0)
 	.notL:
+
+	BTST	#$6,$BFE001	; POTINP - LMB pressed?
+	BNE.S	.noLMB
+	CLR.W	$100		; DEBUG | w 0 100 2
+	.noLMB:

@@ -1,4 +1,4 @@
-	LEA	SPRT2,A0
+	LEA	SPRTKNY,A0
 	MOVE.W	$DFF00C,D0
 	AND.W	#$0303,D0
 	MOVE.W	D0,D1
@@ -14,7 +14,7 @@
 	BRA.S	.notL
 	.notFireD:
 	ADD.B	#$1,(A0)
-	ADD.B	#$1,2(A0)
+	;ADD.B	#$1,2(A0)
 	.notDown:
 	BTST	#$A,D0
 	BEQ.S	.notUp
@@ -24,7 +24,7 @@
 	BRA.S	.notL
 	.notFireU:
 	SUB.B	#$1,(A0)
-	SUB.B	#$1,2(A0)
+	;SUB.B	#$1,2(A0)
 	.notUp:
 	BTST	#$1,D0
 	BEQ.S	.notR

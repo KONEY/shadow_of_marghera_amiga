@@ -80,6 +80,9 @@ $copperLines='
 	dc.w $1507,$fffe
 	dc.w $182,$003
 
+	DC.W $4B07,$FFFE
+	DC.W BPLCON2,%01000011
+
 	DC.W $6D07,$FFFE
 	.BplPtrsBled1:
 	DC.W $E4,0,$E6,0

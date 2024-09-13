@@ -1,16 +1,10 @@
-	;DC.W $87C0,DMACON	; ARM SPRITES
 
 	DC.W $2C07,$FFFE	; # Wait LN 0
 	DC.W $0182,$0013
-
-	DC.W $4B07,$FFFE	; # Wait
-	DC.W BPLCON2,%01000011 ; SCROLL REGISTER (AND PLAYFIELD PRI)
 	DC.W $4B07,$FFFE	; # Wait
 	DC.W $0182,$0113
-
 	DC.W $6607,$FFFE	; # Wait
 	DC.W $0182,$0213
-
 	DC.W $6D07,$FFFE	; # Wait
 	.BplPtrsBled1:
 	DC.W $E4,0,$E6,0
@@ -101,6 +95,4 @@
 	DC.W $EC,0,$EE,0
 	DC.W $F0,0,$F2,0
 	DC.W $F4,0,$F6,0
-	;DC.W BPL1MOD,bysb-2
-	;DC.W BPL2MOD,bysb-2
 	

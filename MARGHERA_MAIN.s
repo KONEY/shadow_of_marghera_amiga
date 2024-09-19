@@ -1,8 +1,12 @@
 ;*** MiniStartup by Photon ***
-	INCDIR	"NAS:AMIGA/KONEY/"
+	INCDIR	"NAS:CODE/shadow_of_marghera_amiga/"
 	SECTION	"Code",CODE
 	INCLUDE	"custom-registers.i"
+	INCLUDE	"med/med_feature_control.i"	; MED CFGs
 	INCLUDE	"PhotonsMiniWrapper1.04!.s"
+	IFNE MED_PLAY_ENABLE
+	INCLUDE	"med/MED_PlayRoutine.i"
+	ENDC
 ;********** Constants **********
 sideBleed		EQU 16*2
 scrWi		EQU 320
@@ -117,6 +121,12 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	ROL.L	#$4,D3
 	MOVE.W	D3,(A0)+
 	DBRA	D0,.loop
+	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
+
+	IFNE MED_PLAY_ENABLE
+	MOVE.W	#%1000000000001100,INTENA(A6)	; Master and lev6	; NO COPPER-IRQ!
+	JSR	_startmusic
+	ENDC
 
 	;*--- start copper ---*
 	MOVE.L	#COPPER,COP1LC(A6)	; ## POINT COPPERLIST ##
@@ -129,7 +139,7 @@ MainLoop:
 	MOVE.L	FRM_NEXT_ADDR,A3
 	JSR	(A3)		; EXECUTE SUBROUTINE BLOCK#
 
-	INCLUDE "joySpriteCtrl.i"
+	;INCLUDE "joySpriteCtrl.i"
 
 	;*--- main loop end ---*
 	BTST	#$6,$BFE001	; POTINP - LMB pressed?
@@ -140,6 +150,12 @@ MainLoop:
 	BNE.W	MainLoop		; then loop
 	;*--- exit ---*
 	.exit:
+	IFNE MED_PLAY_ENABLE
+	; --- quit MED code ---
+	MOVEM.L	D0-A6,-(SP)
+	JSR	_endmusic
+	MOVEM.L	(SP)+,D0-A6
+	ENDC
 	RTS
 
 ;********** Demo Routines **********
@@ -150,11 +166,11 @@ PokePtrs:
 	RTS
 
 VBint:				; Blank template VERTB interrupt
-	BTST	#5,INTREQR+1(A6)	; CHECK IF IT'S OUR VERTB INT.
+	BTST	#5,CUSTOM+INTREQR+1	; CHECK IF IT'S OUR VERTB INT.
 	BEQ.S	.notVB
 	;*--- DO STUFF HERE ---*
-	MOVE.W	#$20,INTREQ(A6)	; POLL IRQ BIT
-	MOVE.W	#$20,INTREQ(A6)
+	MOVE.W	#$20,CUSTOM+INTREQ	; POLL IRQ BIT
+	MOVE.W	#$20,CUSTOM+INTREQ
 	.notVB:	
 	RTE
 
@@ -487,7 +503,7 @@ LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
 
-MED_MODULE:	INCBIN "VIC-20_2024FIX.med"
+MED_MODULE:	INCBIN "med/VIC-20_2024FIX.med"
 _chipzero:	DC.L 0
 _MED_MODULE:
 

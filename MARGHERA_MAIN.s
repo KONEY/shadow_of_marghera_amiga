@@ -25,7 +25,9 @@ vSlices		EQU scrWi/16
 ;********** Demo **********	;Demo-specific non-startup code below.
 Demo:			;a4=VBR, a6=Custom Registers Base addr
 	;*--- init ---*
+	IFEQ VBLANK
 	MOVE.L	#VBint,$6C(A4)
+	ENDC
 	MOVE.W	#$C020,INTENA(A6)
 	MOVE.W	#$87E0,DMACON(A6)
 
@@ -503,7 +505,7 @@ LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
 
-MED_MODULE:	INCBIN "med/VIC-20_2024FIX.med"
+MED_MODULE:	INCBIN "med/VIC-20_2024FIX_SPD33.med"
 _chipzero:	DC.L 0
 _MED_MODULE:
 

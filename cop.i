@@ -3,6 +3,10 @@
 	DC.W $0182,$0013
 	DC.W $4B07,$FFFE	; # Wait
 	DC.W $0182,$0113
+	
+	DC.W $5207,$FFFE	; # Wait
+	DC.W $019E,$0EED
+	
 	DC.W $6607,$FFFE	; # Wait
 	DC.W $0182,$0213
 	DC.W $6D07,$FFFE	; # Wait

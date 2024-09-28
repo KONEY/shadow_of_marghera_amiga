@@ -6,6 +6,10 @@ $copperLines='
 	dc.w $182,$013
 	dc.w $4b07,$fffe
 	dc.w $182,$113
+
+	dc.w $5207,$fffe
+	dc.w $019E,$0EED
+
 	dc.w $6607,$fffe
 	dc.w $182,$213
 	dc.w $7c07,$fffe

@@ -541,7 +541,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W DDFSTOP,$00D0	; and stop for standard screen.
 	DC.W BPLCON3,$0C00	; (AGA compat. if any Dual Playf. mode)
 	DC.W BPLCON2,%01000011 ; SCROLL REGISTER (AND PLAYFIELD PRI)
-	.PFsScrolling:
+	;.PFsScrolling:
 	DC.W BPLCON1,$88
 	DC.W BPL1MOD,bysb-2	; BPL1MOD Bitplane modulo (odd planes)
 	DC.W BPL2MOD,bysb-2	; BPL2MOD Bitplane modulo (even planes)
@@ -553,7 +553,7 @@ COPPER:	; #### COPPERLIST ####################################################
 	DC.W $0198,$0666,$019A,$0888,$019C,$0AA9,$019E,$0F00	; PF
 	DC.W $01A0,$0EF2,$01A2,$0720,$01A4,$0EA2,$01A6,$0D91
 	DC.W $01A8,$0C71,$01AA,$0A51,$01AC,$0A41,$01AE,$0941
-	DC.W $01B0,$0821,$01B2,$0700,$01B4,$0700,$01B6,$0600
+	DC.W $01B0,$0821,$01B2,$0900,$01B4,$0700,$01B6,$0600
 	DC.W $01B8,$0500,$01BA,$0400,$01BC,$0300,$01BE,$0200
 	;.RedLight:
 	;$019E,$0EED

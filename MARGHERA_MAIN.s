@@ -488,13 +488,20 @@ LFO_SINE1:	DC.W 7,8,10,11,12,13,13,14,14,15,13,13,12,11,10,8,7,6,4,3,2,1,1,0,1,0
 LFO_SINE2:	DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5
 ;LFO_SINE2:	DC.W (7>>4)+7,99,1010,1111,1313,1414,1414,1515,1515,1515,1414,1414,1313,1111,1010,99,77,55,44,33,11,00,00,00,00,00,00,00,11,33,44,55
 LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
+
+		;dcb.l	8,0
+MED_MODULE:	INCLUDE "med/SCORE.i"
+		;dcb.l	8,0
+
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
 
-MED_MODULE:	INCBIN "med/VIC-20_2024FIX_SPD34.med"
-_chipzero:	DC.L 0
+MED_SAMPLES:	INCLUDE "med/SAMPLES.i"	;<<<<< MED SAMPLES IN CHIP RAM!!
 _MED_MODULE:
+	IFNE	SPLIT_RELOCS
+_chipzero:	DC.L 0
+	ENDC
 
 FLAME_MASK:	INCBIN "flame_mask_32x190x1.raw"
 SPRFIRE1:	DC.B $3B,$B4,$3B+$27,%00000001	; VSTART $2C-$F2 | HSTART $44 | VSTOP | CTRLBITS

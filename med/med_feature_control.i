@@ -18,7 +18,7 @@ STEP_SEQ		EQU	0	; Enable step sequencer in MED_STEPSEQ_POS
 SONG_POS_TRACKING	EQU	0	; Keep track of song position in MED_SONG_POS
 BLOCK_LINE_TRACKING	EQU	0	; Keep track of block line in MED_BLOCK_LINE
 INSTR_TRACKING	EQU	0	; Tracks instruments#, notes and levels for each track
-SPLIT_RELOCS	EQU	0	; Samples are expected at label MED_SAMPLES so all the rest can be in fast ram
+SPLIT_RELOCS	EQU	1	; Samples are expected at label MED_SAMPLES so all the rest can be in fast ram
 ; #### KONEY ####
 
 ;****** Timing control ******

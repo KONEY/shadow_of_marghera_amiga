@@ -78,9 +78,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	LEA	8(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
-	;LEA	SPRLIGHT,A0	; SPRT 0-1
 	LEA	COPPER\.SpritePointers+2,A1
-	;BSR.W	PokePtrs
 	LEA	SPRFIRE1,A0	; SPRT 6-6
 	LEA	32(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
@@ -117,15 +115,24 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 
 	JSR	__ADD_BLEED_WORDS
 
-	LEA	LFO_SINE2,A0	; ## COUPLE NYBBLES OF LFO VALUES ##
-	MOVE.W	#$1F,D0
+	; ## SINCOSIN VALUES ##
+	LEA	LFO_AMPS,A2
+	LEA	LFO_SINE_PRECALC,A0
+	LEA	SinTbl,A1
+	MOVE.W	#$3F-1,D0
 	.loop:
-	MOVE.W	(A0),D3
-	ROR.L	#$4,D3
-	MOVE.W	(A0),D3
-	ROL.L	#$4,D3
+	MOVE.W	(A1),D3
+	LEA	6(A1),A1
+	;MULU.W	(A2),D3
+	;DIVU.W	#16384,D3
+	;ADD.W	2(A2),D3
+	;MOVE.W	D3,D5
+	;LSL.W 	#$4,D5
+	;OR.W	D5,D3
+	;LEA	4(A2),A2
 	MOVE.W	D3,(A0)+
 	DBRA	D0,.loop
+	; ## SINCOSIN VALUES ##
 	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
 
 	IFNE MED_PLAY_ENABLE
@@ -147,10 +154,10 @@ MainLoop:
 	;INCLUDE "joySpriteCtrl.i"
 
 	;*--- main loop end ---*
-	BTST	#$6,$BFE001	; POTINP - LMB pressed?
-	BNE.S	.skip
-	BSR.W	__SPILL_FIRE1\.skip
-	.skip:
+	;BTST	#$6,$BFE001	; POTINP - LMB pressed?
+	;BNE.S	.skip
+	;BSR.W	__SPILL_FIRE1\.skip
+	;.skip:
 	BTST	#$2,POTINP(A6)	; POTINP - RMB pressed?
 	BNE.W	MainLoop		; then loop
 	;*--- exit ---*
@@ -180,12 +187,15 @@ PokePtrs:
 	; RTE
 
 __RACE_THE_BEAM:
-	LEA	LFO_SINE2,A0	; NYBBLES PREVIOUSLY COUPLED
+	LEA	LFO_AMPS,A2
+	LEA	LFO_SINE_PRECALC,A0	; ## SINCOSIN VALUES ##
 	MOVE.W	SCROLL_IDX,D0
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
 	MOVE.W	D0,SCROLL_IDX
 	CLR.L	D2
+	CLR.L	D3
+	CLR.L	D5
 
 	.dummyWait:
 	MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
@@ -197,6 +207,15 @@ __RACE_THE_BEAM:
 	MOVE.W	(A0,D0.W),D3	; PRELOAD INITIAL VALUES
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
+
+	; ###### AMPLITUDE ##############
+	MULU.W	(A2)+,D3
+	DIVU.W	#16384,D3
+	ADD.W	(A2)+,D3
+	MOVE.W	D3,D5
+	LSL.W 	#$4,D5
+	OR.W	D5,D3
+	; ###### AMPLITUDE ##############
 
 	.waitNextRaster:
 	MOVE.W	VHPOSR(A6),D2
@@ -213,23 +232,19 @@ __RACE_THE_BEAM:
 	BEQ.S	.noSyncShift	
 
 	MOVE.W	D3,BPLCON1(A6)	; PRELOADED VALUES
+
 	MOVE.W	(A0,D0.W),D3
-	;ROR.L	#$4,D3
-	;MOVE.W	(A0,D0.W),D3
-	;ROL.L	#$4,D3
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
 
-	;MULS.W	#$5,D7		; DUMMY OPERATIONS
-	;DIVS.W	#$7,D7		; DUMMY OPERATIONS
-
-	;TST.W	D7
-	;BNE.S	.notFourthLine
-	;LEA	$20(A0),A0
-	;;SUB.W	#$2,D0
-	;ADD.W	#$1,D6
-	;MOVE.W	D6,D7		; EVERY x LINES...
-	;.notFourthLine:
+	; ###### AMPLITUDE ##############
+	MULU.W	(A2)+,D3
+	DIVU.W	#16384,D3
+	ADD.W	(A2)+,D3
+	MOVE.W	D3,D5
+	LSL.W 	#$4,D5
+	OR.W	D5,D3
+	; ###### AMPLITUDE ##############
 
 	.noSyncShift:
 	MOVE.L	VPOSR(A6),D1	; REACH SCREEN END
@@ -525,14 +540,14 @@ PF1_SCR_IDX:	DC.W 0
 PF2_SCREENS:	DC.L PF2S1,PF2S2,PF2S3,PF2S4,PF2S5,PF2S6,PF2S7,PF2S1,PF2S8,PF2S9,PF2SA,PF2SB,PF2SC,PF2SD,0
 PF2_SCR_IDX:	DC.W 0
 SCROLL_IDX:	DC.W 0
-;LFO_SINE1:	DC.W 7,8,10,11,12,13,13,14,14,15,13,13,12,11,10,8,7,6,4,3,2,1,1,0,1,0,1,1,2,3,4,6
-LFO_SINE2:	DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5
-;LFO_SINE2:	DC.W (7>>4)+7,99,1010,1111,1313,1414,1414,1515,1515,1515,1414,1414,1313,1111,1010,99,77,55,44,33,11,00,00,00,00,00,00,00,11,33,44,55
-;LFO_SINE3:	DC.W 1,1,2,2,3,4,4,5,5,6,6,7,8,7,8,7,6,7,6,5,5,4,4,3,2,3,2,2,1,1,0,0
+LFO_SINE_PRECALC:	DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5,0,0,0,0
+		DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5,0,0,0,0
+LFO_SINE:		DC.W 7,9,10,11,13,14,14,15,15,15,14,14,13,11,10,9,7,5,4,3,1,0,0,0,0,0,0,0,1,3,4,5,0,0,0,0
+LFO_AMPS:		DC.W 2,8,3,7,4,6,5,5,6,4,7,4,8,3,9,3,10,2,11,2,12,1,13,1,14,0,15,0
+		DC.W 15,0,15,0,15,0,15,0,15,0,15,0,15,0,15,0,15,0,15,0,15,0,15,0,15,0,15,0
 
-		;dcb.l	8,0
+		INCLUDE "sincosin_table.i"
 MED_MODULE:	INCLUDE "med/SCORE.i"
-		;dcb.l	8,0
 
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem

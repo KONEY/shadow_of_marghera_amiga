@@ -1,15 +1,8 @@
 <?php
 ## KONEY 2024 ## DEFRAG COPPERLISTS!
 ## ; https://gradient-blaster.grahambates.com/?points=013@0,113@34,213@62,313@84,413@104,513@120,613@131,713@141,813@150,923@158,b33@165,e73@175,e73@182,403@213,003@238&steps=256&blendMode=linear&ditherMode=orderedMono&target=amigaOcs&ditherAmount=12
-## ; https://gradient-blaster.grahambates.com/?points=013@0,113@2,213@4,ea2@26&steps=27&blendMode=perceptual&ditherMode=blueNoiseMono&target=amigaOcs&ditherAmount=9
-## ; https://gradient-blaster.grahambates.com/?points=013@0,113@2,213@4,d91@26&steps=27&blendMode=lab&ditherMode=goldenRatioMono&target=amigaOcs&ditherAmount=16
-## ; https://gradient-blaster.grahambates.com/?points=013@0,113@2,213@5,700@26&steps=27&blendMode=perceptual&ditherMode=off&target=amigaOcs
-## ; https://gradient-blaster.grahambates.com/?points=013@0,113@5,213@9,821@26&steps=27&blendMode=perceptual&ditherMode=off&target=amigaOcs
-## ; https://gradient-blaster.grahambates.com/?points=003@0,202@18,500@26&steps=27&blendMode=linear&ditherMode=off&target=amigaOcs
-## ; https://gradient-blaster.grahambates.com/?points=013@0,113@1,213@2,c21@15,c71@26&steps=27&blendMode=perceptual&ditherMode=off&target=amigaOcs
-## ; https://gradient-blaster.grahambates.com/?points=012@0,720@26&steps=27&blendMode=perceptual&ditherMode=off&target=amigaOcs
-## ; https://gradient-blaster.grahambates.com/?points=012@0,311@7,a51@26&steps=27&blendMode=linear&ditherMode=off&target=amigaOcs
-## ; https://gradient-blaster.grahambates.com/?points=001@0,311@4,a41@8&steps=9&blendMode=linear&ditherMode=off&target=amigaOcs
+## ; https://gradient-blaster.grahambates.com/?points=013@0,113@34,213@62,313@84,413@104,513@120,613@131,713@141,813@150,923@158,b33@165,e73@175,a52@186,723@199,211@210,111@219,011@230,000@237&steps=256&blendMode=linear&ditherMode=blueNoiseMono&target=amigaOcs&ditherAmount=0
+
 $copperLines='
 	dc.w $2c07,$fffe
 	dc.w $182,$013
@@ -293,45 +286,45 @@ $copperLines='
 	dc.w $182,$d53
 	dc.w $d807,$fffe
 	dc.w $182,$e63
+
 	dc.w $da07,$fffe
 	dc.w $182,$e73
-	dc.w $e507,$fffe
-	dc.w $182,$d63
+	dc.w $de07,$fffe
+	dc.w $182,$d62
+	dc.w $e107,$fffe
+	dc.w $182,$c62
+	dc.w $e307,$fffe
+	dc.w $182,$b52
+	dc.w $e607,$fffe
+	dc.w $182,$a52
 	dc.w $e807,$fffe
-	dc.w $182,$c63
+	dc.w $182,$a42
 	dc.w $e907,$fffe
-	dc.w $182,$c53
-	dc.w $eb07,$fffe
-	dc.w $182,$b53
+	dc.w $182,$942
+	dc.w $ec07,$fffe
+	dc.w $182,$932
 	dc.w $ed07,$fffe
-	dc.w $182,$b43
-	dc.w $ee07,$fffe
-	dc.w $182,$a43
+	dc.w $182,$832
+	dc.w $f007,$fffe
+	dc.w $182,$822
 	dc.w $f107,$fffe
-	dc.w $182,$933
-	dc.w $f407,$fffe
-	dc.w $182,$833
-	dc.w $f507,$fffe
-	dc.w $182,$823
-	dc.w $f707,$fffe
 	dc.w $182,$723
+	dc.w $f507,$fffe
+	dc.w $182,$612
+	dc.w $f707,$fffe
+	dc.w $182,$512
 	dc.w $f907,$fffe
-	dc.w $182,$713
+	dc.w $182,$412
 	dc.w $fa07,$fffe
-	dc.w $182,$613
+	dc.w $182,$411
+	dc.w $fb07,$fffe
+	dc.w $182,$311
 	dc.w $fd07,$fffe
-	dc.w $182,$503
-	dc.w $ff07,$fffe
-	dc.w $182,$403
-	dc.w $ffdf,$fffe
-	dc.w $307,$fffe
-	dc.w $182,$303
+	dc.w $182,$211
+	dc.w $007,$fffe
+	dc.w $182,$111
 	dc.w $907,$fffe
-	dc.w $182,$203
-	dc.w $f07,$fffe
-	dc.w $182,$103
-	dc.w $1507,$fffe
-	dc.w $182,$003
+	dc.w $182,$011
 
 	DC.W $6D07,$FFFE
 	.BplPtrsBled1:
@@ -347,7 +340,7 @@ $copperLines='
 
 	DC.W $FFDF,$FFFE
 
-	DC.W $1A07,$FFFE
+	DC.W $1307,$FFFE
 	.BplPtrsBled2:
 	DC.W $E0,0,$E2,0
 	DC.W $E4,0,$E6,0
@@ -355,8 +348,7 @@ $copperLines='
 	DC.W $EC,0,$EE,0
 	DC.W $F0,0,$F2,0
 	DC.W $F4,0,$F6,0
-
-	DC.W $FFFF,$FFFE';
+	';
 	$copStart='2C';
 	$copperList=[];
 	$lineIDX=0;

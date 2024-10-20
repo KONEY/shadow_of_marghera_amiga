@@ -64,7 +64,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	LEA	16(A1),A1		; -8 bytes on .exe!
 	BSR.W	PokePtrs
 
-	LEA	BLEED+blitHe*bypl-bypl,A0
+	LEA	_BLEED,A0
 	LEA	COPPER\.BplPtrsBled2+2,A1	
 	BSR.W	PokePtrs
 	LEA	8(A1),A1		; -8 bytes on .exe!
@@ -250,7 +250,7 @@ __RACE_THE_BEAM:
 	MOVE.L	VPOSR(A6),D1	; REACH SCREEN END
 	LSR.L	#$1,D1
 	LSR.W	#$7,D1
-	CMP.W	#$120,D1
+	CMP.W	#$130,D1
 	BNE.W	.waitNextRaster
 	;MOVE.W	#$0,BPLCON1(A6)	; RESET REGISTERS
 	RTS
@@ -644,6 +644,8 @@ COPPER:	; #### COPPERLIST ####################################################
 
 	.Waits:
 	INCLUDE "cop.i"
+
+	DC.W $0196,$0000,$0198,$0000,$0188,$0000
 	;DC.W $6D07,$FFFE
 	;.BplPtrsBled1:
 	;DC.W $E4,0,$E6,0	; 2
@@ -674,6 +676,7 @@ COPPER:	; #### COPPERLIST ####################################################
 ;*******************************************************************************
 
 BLEED:		DS.B (blitHe-50)*bypl
+_BLEED:
 PF1:		DS.B blitHe*bypl*2
 PF2:		DS.B blitHe*bypl*3
 

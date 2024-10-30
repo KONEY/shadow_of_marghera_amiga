@@ -326,417 +326,7 @@ $copperLines='
 	dc.w $907,$fffe
 	dc.w $182,$011
 
-	dc.w $da07,$fffe
-	dc.w $19e,$ddc
-	dc.w $dd07,$fffe
-	dc.w $19e,$cdb
-	dc.w $de07,$fffe
-	dc.w $19e,$ccb
-	dc.w $e107,$fffe
-	dc.w $19e,$bca
-	dc.w $e207,$fffe
-	dc.w $19e,$bba
-	dc.w $e507,$fffe
-	dc.w $19e,$aba
-	dc.w $e607,$fffe
-	dc.w $19e,$aaa
-	dc.w $e707,$fffe
-	dc.w $19e,$aa9
-	dc.w $e807,$fffe
-	dc.w $19e,$9a9
-	dc.w $ea07,$fffe
-	dc.w $19e,$999
-	dc.w $eb07,$fffe
-	dc.w $19e,$998
-	dc.w $ec07,$fffe
-	dc.w $19e,$898
-	dc.w $ee07,$fffe
-	dc.w $19e,$888
-	dc.w $ef07,$fffe
-	dc.w $19e,$887
-	dc.w $f007,$fffe
-	dc.w $19e,$787
-	dc.w $f207,$fffe
-	dc.w $19e,$777
-	dc.w $f407,$fffe
-	dc.w $19e,$776
-	dc.w $f507,$fffe
-	dc.w $19e,$676
-	dc.w $f707,$fffe
-	dc.w $19e,$666
-	dc.w $f807,$fffe
-	dc.w $19e,$665
-	dc.w $f907,$fffe
-	dc.w $19e,$565
-	dc.w $fa07,$fffe
-	dc.w $19e,$555
-	dc.w $fd07,$fffe
-	dc.w $19e,$455
-	dc.w $ff07,$fffe
-	dc.w $19e,$444
-	dc.w $107,$fffe
-	dc.w $19e,$344
-	dc.w $307,$fffe
-	dc.w $19e,$343
-	dc.w $407,$fffe
-	dc.w $19e,$333
-	dc.w $607,$fffe
-	dc.w $19e,$233
-	dc.w $907,$fffe
-	dc.w $19e,$222
-	dc.w $b07,$fffe
-	dc.w $19e,$122
-	dc.w $d07,$fffe
-	dc.w $19e,$121
-	dc.w $e07,$fffe
-	dc.w $19e,$111
-	dc.w $1207,$fffe
-	dc.w $19e,$011
 
-	dc.w $da07,$fffe
-	dc.w $19c,$998
-	dc.w $dd07,$fffe
-	dc.w $19c,$898
-	dc.w $de07,$fffe
-	dc.w $19c,$887
-	dc.w $e307,$fffe
-	dc.w $19c,$786
-	dc.w $e507,$fffe
-	dc.w $19c,$776
-	dc.w $e907,$fffe
-	dc.w $19c,$676
-	dc.w $eb07,$fffe
-	dc.w $19c,$666
-	dc.w $ee07,$fffe
-	dc.w $19c,$665
-	dc.w $ef07,$fffe
-	dc.w $19c,$565
-	dc.w $f007,$fffe
-	dc.w $19c,$555
-	dc.w $f407,$fffe
-	dc.w $19c,$554
-	dc.w $f507,$fffe
-	dc.w $19c,$454
-	dc.w $f707,$fffe
-	dc.w $19c,$444
-	dc.w $fb07,$fffe
-	dc.w $19c,$443
-	dc.w $fc07,$fffe
-	dc.w $19c,$343
-	dc.w $fe07,$fffe
-	dc.w $19c,$333
-	dc.w $107,$fffe
-	dc.w $19c,$233
-	dc.w $507,$fffe
-	dc.w $19c,$222
-	dc.w $907,$fffe
-	dc.w $19c,$122
-	dc.w $b07,$fffe
-	dc.w $19c,$121
-	dc.w $d07,$fffe
-	dc.w $19c,$111
-	dc.w $1207,$fffe
-	dc.w $19c,$011
-
-	dc.w $da07,$fffe
-	dc.w $198,$555
-	dc.w $e007,$fffe
-	dc.w $198,$444
-	dc.w $eb07,$fffe
-	dc.w $198,$333
-	dc.w $f307,$fffe
-	dc.w $198,$233
-	dc.w $fa07,$fffe
-	dc.w $198,$222
-	dc.w $107,$fffe
-	dc.w $198,$122
-	dc.w $607,$fffe
-	dc.w $198,$121
-	dc.w $807,$fffe
-	dc.w $198,$111
-	dc.w $1207,$fffe
-	dc.w $198,$011
-
-	dc.w $da07,$fffe
-	dc.w $196,$444
-	dc.w $e007,$fffe
-	dc.w $196,$333
-	dc.w $ef07,$fffe
-	dc.w $196,$222
-	dc.w $f107,$fffe
-	dc.w $196,$233
-	dc.w $f207,$fffe
-	dc.w $196,$222
-	dc.w $fc07,$fffe
-	dc.w $196,$122
-	dc.w $207,$fffe
-	dc.w $196,$121
-	dc.w $507,$fffe
-	dc.w $196,$111
-	dc.w $1207,$fffe
-	dc.w $196,$011
-
-	dc.w $da07,$fffe
-	dc.w $194,$333
-	dc.w $de07,$fffe
-	dc.w $194,$222
-	dc.w $f207,$fffe
-	dc.w $194,$122
-	dc.w $fa07,$fffe
-	dc.w $194,$121
-	dc.w $ff07,$fffe
-	dc.w $194,$111
-	dc.w $1207,$fffe
-	dc.w $194,$011
-
-	dc.w $da07,$fffe
-	dc.w $192,$222
-	dc.w $e107,$fffe
-	dc.w $192,$111
-	dc.w $807,$fffe
-	dc.w $192,$011
-	dc.w $907,$fffe
-	dc.w $192,$111
-	dc.w $a07,$fffe
-	dc.w $192,$011
-	dc.w $b07,$fffe
-	dc.w $192,$111
-	dc.w $c07,$fffe
-	dc.w $192,$011
-	dc.w $d07,$fffe
-	dc.w $192,$111
-	dc.w $e07,$fffe
-	dc.w $192,$011
-	dc.w $f07,$fffe
-	dc.w $192,$111
-	dc.w $1007,$fffe
-	dc.w $192,$011
-	dc.w $1107,$fffe
-	dc.w $192,$111
-	dc.w $1207,$fffe
-	dc.w $192,$011
-
-	dc.w $da07,$fffe
-	dc.w $19a,$777
-	dc.w $df07,$fffe
-	dc.w $19a,$666
-	dc.w $e707,$fffe
-	dc.w $19a,$555
-	dc.w $ef07,$fffe
-	dc.w $19a,$444
-	dc.w $f407,$fffe
-	dc.w $19a,$344
-	dc.w $f807,$fffe
-	dc.w $19a,$343
-	dc.w $f907,$fffe
-	dc.w $19a,$333
-	dc.w $fc07,$fffe
-	dc.w $19a,$233
-
-	dc.w $107,$fffe
-	dc.w $19a,$222
-	dc.w $607,$fffe
-	dc.w $19a,$122
-	dc.w $a07,$fffe
-	dc.w $19a,$121
-	dc.w $b07,$fffe
-	dc.w $19a,$111
-	dc.w $1207,$fffe
-	dc.w $19a,$011
-
-	dc.w $da07,$fffe
-	dc.w $18e,$333
-	dc.w $df07,$fffe
-	dc.w $18e,$222
-	dc.w $f307,$fffe
-	dc.w $18e,$122
-	dc.w $fb07,$fffe
-	dc.w $18e,$121
-	dc.w $007,$fffe
-	dc.w $18e,$111
-	dc.w $1007,$fffe
-	dc.w $18e,$011
-	dc.w $1107,$fffe
-	dc.w $18e,$111
-	dc.w $1207,$fffe
-	dc.w $18e,$011
-
-	dc.w $da07,$fffe
-	dc.w $18c,$333
-	dc.w $df07,$fffe
-	dc.w $18c,$222
-	dc.w $f307,$fffe
-	dc.w $18c,$122
-	dc.w $fb07,$fffe
-	dc.w $18c,$121
-	dc.w $007,$fffe
-	dc.w $18c,$111
-	dc.w $1007,$fffe
-	dc.w $18c,$011
-	dc.w $1107,$fffe
-	dc.w $18c,$111
-	dc.w $1207,$fffe
-	dc.w $18c,$011
-
-	dc.w $da07,$fffe
-	dc.w $18a,$112
-	dc.w $db07,$fffe
-	dc.w $18a,$012
-	dc.w $e707,$fffe
-	dc.w $18a,$111
-	dc.w $e807,$fffe
-	dc.w $18a,$011
-	dc.w $e907,$fffe
-	dc.w $18a,$111
-	dc.w $ea07,$fffe
-	dc.w $18a,$011
-	dc.w $eb07,$fffe
-	dc.w $18a,$111
-	dc.w $ec07,$fffe
-	dc.w $18a,$011
-	dc.w $ed07,$fffe
-	dc.w $18a,$111
-	dc.w $ee07,$fffe
-	dc.w $18a,$011
-	dc.w $ef07,$fffe
-	dc.w $18a,$111
-	dc.w $f007,$fffe
-	dc.w $18a,$011
-	dc.w $f107,$fffe
-	dc.w $18a,$111
-	dc.w $f207,$fffe
-	dc.w $18a,$011
-	dc.w $f307,$fffe
-	dc.w $18a,$111
-	dc.w $f407,$fffe
-	dc.w $18a,$001
-	dc.w $f507,$fffe
-	dc.w $18a,$011
-	dc.w $f607,$fffe
-	dc.w $18a,$001
-	dc.w $f707,$fffe
-	dc.w $18a,$011
-	dc.w $1007,$fffe
-	dc.w $18a,$000
-	dc.w $1107,$fffe
-	dc.w $18a,$010
-	dc.w $1207,$fffe
-	dc.w $18a,$011
-
-	dc.w $da07,$fffe
-	dc.w $188,$112
-	dc.w $db07,$fffe
-	dc.w $188,$012
-	dc.w $e707,$fffe
-	dc.w $188,$111
-	dc.w $e807,$fffe
-	dc.w $188,$011
-	dc.w $e907,$fffe
-	dc.w $188,$111
-	dc.w $ea07,$fffe
-	dc.w $188,$011
-	dc.w $eb07,$fffe
-	dc.w $188,$111
-	dc.w $ec07,$fffe
-	dc.w $188,$011
-	dc.w $ed07,$fffe
-	dc.w $188,$111
-	dc.w $ee07,$fffe
-	dc.w $188,$011
-	dc.w $ef07,$fffe
-	dc.w $188,$111
-	dc.w $f007,$fffe
-	dc.w $188,$011
-	dc.w $f107,$fffe
-	dc.w $188,$111
-	dc.w $f207,$fffe
-	dc.w $188,$011
-	dc.w $f307,$fffe
-	dc.w $188,$111
-	dc.w $f407,$fffe
-	dc.w $188,$001
-	dc.w $f507,$fffe
-	dc.w $188,$011
-	dc.w $f607,$fffe
-	dc.w $188,$001
-	dc.w $f707,$fffe
-	dc.w $188,$011
-	dc.w $1007,$fffe
-	dc.w $188,$000
-	dc.w $1107,$fffe
-	dc.w $188,$010
-	dc.w $1207,$fffe
-	dc.w $188,$011
-
-	dc.w $da07,$fffe
-	dc.w $186,$222
-	dc.w $e107,$fffe
-	dc.w $186,$111
-	dc.w $e207,$fffe
-	dc.w $186,$222
-	dc.w $e307,$fffe
-	dc.w $186,$111
-	dc.w $e507,$fffe
-	dc.w $186,$222
-	dc.w $e607,$fffe
-	dc.w $186,$111
-	dc.w $ea07,$fffe
-	dc.w $186,$222
-	dc.w $eb07,$fffe
-	dc.w $186,$111
-	dc.w $807,$fffe
-	dc.w $186,$011
-	dc.w $a07,$fffe
-	dc.w $186,$111
-	dc.w $b07,$fffe
-	dc.w $186,$011
-	dc.w $c07,$fffe
-	dc.w $186,$111
-	dc.w $e07,$fffe
-	dc.w $186,$011
-	dc.w $f07,$fffe
-	dc.w $186,$111
-	dc.w $1007,$fffe
-	dc.w $186,$011
-	dc.w $1107,$fffe
-	dc.w $186,$111
-	dc.w $1207,$fffe
-	dc.w $186,$011
-
-	dc.w $da07,$fffe
-	dc.w $184,$222
-	dc.w $e107,$fffe
-	dc.w $184,$111
-	dc.w $e207,$fffe
-	dc.w $184,$222
-	dc.w $e307,$fffe
-	dc.w $184,$111
-	dc.w $e507,$fffe
-	dc.w $184,$222
-	dc.w $e607,$fffe
-	dc.w $184,$111
-	dc.w $ea07,$fffe
-	dc.w $184,$222
-	dc.w $eb07,$fffe
-	dc.w $184,$111
-	dc.w $807,$fffe
-	dc.w $184,$011
-	dc.w $a07,$fffe
-	dc.w $184,$111
-	dc.w $b07,$fffe
-	dc.w $184,$011
-	dc.w $c07,$fffe
-	dc.w $184,$111
-	dc.w $e07,$fffe
-	dc.w $184,$011
-	dc.w $f07,$fffe
-	dc.w $184,$111
-	dc.w $1007,$fffe
-	dc.w $184,$011
-	dc.w $1107,$fffe
-	dc.w $184,$111
-	dc.w $1207,$fffe
-	dc.w $184,$011
 
 	DC.W $6D07,$FFFE
 	.BplPtrsBled1:
@@ -746,7 +336,7 @@ $copperLines='
 	DC.W $F0,0,$F2,0
 	DC.W $F4,0,$F6,0
 
-	DC.W $E007,$FFFE
+	DC.W $E007,$FFFE		; NEGATIVE MODULOS
 	DC.W BPL1MOD,-1*bypl*3+2
 	DC.W BPL2MOD,-1*bypl*3+2
 
@@ -765,9 +355,14 @@ $copperLines='
 	$copperList=[];
 	$lineIDX=0;
 	$copperLines=explode("\n", $copperLines);
+	error_reporting(E_ERROR);
 	foreach ($copperLines AS $k=>$value){
 		$value=trim($value);
 		if(!$value && !$k){ continue;	}
+		## COMMENTS ##
+		$commented=explode(';',$value);
+		$value=$commented[0];
+		## COMMENTS ##
 		$line=explode('$',$value);
 		@$tempHex=dechex(hexdec(trim($line[1])));
 		@$line[0]=hexdec(substr(trim($line[1]),0,-3));
@@ -776,6 +371,9 @@ $copperLines='
 		if(strtoupper($line[1])=='FFFE'){
 			# LINE IS A WAIT
 			$lineIDX=$line[0];
+			if($commented[1]){
+				$copperList[$lineIDX]['LNS'][]="; ".$commented[1];
+			}
 		}else{
 			# LINE IS AN INSTRUCTION
 			if($line[0] && !(strpos($line[1],',')!==false)){
@@ -785,9 +383,9 @@ $copperLines='
 				# LINE IS A COMPLEX INSTRUCTION, A LABEL OR AN EMPTY LINE
 				if(stripos($value, 'DC.W')!==false){
 					if(!$line[1]){
-						$value=str_ireplace('dc.w','DC.W',$value);		# CONTAINS CONSTANTS
+						$value=str_ireplace('dc.w','DC.W',$value);	# CONTAINS CONSTANTS
 					}else{
-						$value=strtoupper($value);		# A COMPLEX INSTRUCTION?
+						$value=strtoupper($value);					# A COMPLEX INSTRUCTION?
 					}
 				}
 				$copperList[$lineIDX]['LNS'][]=$value;
@@ -796,7 +394,6 @@ $copperLines='
 	}
 	//print_r($copperList);	exit;
 	#######################################
-	error_reporting(E_ERROR);
 	//echo "\n".'	.Waits:';
 	for($i=hexdec($copStart); $i<hexdec('ff'); $i++){
 		if(!array_key_exists($i, $copperList)){	continue;	}

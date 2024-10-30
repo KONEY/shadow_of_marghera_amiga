@@ -133,6 +133,7 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	MOVE.W	D3,(A0)+
 	DBRA	D0,.loop
 	; ## SINCOSIN VALUES ##
+	BSR.W	__FILL_SINE_TEMP
 	; #### CPU INTENSIVE TASKS BEFORE STARTING MUSIC
 
 	IFNE MED_PLAY_ENABLE
@@ -150,6 +151,8 @@ MainLoop:
 	;###########################################################
 	MOVE.L	FRM_NEXT_ADDR,A3
 	JSR	(A3)		; EXECUTE SUBROUTINE BLOCK#
+
+	BSR.W	__FILL_SINE_TEMP
 
 	;INCLUDE "joySpriteCtrl.i"
 
@@ -186,7 +189,8 @@ PokePtrs:
 	; .notVB:	
 	; RTE
 
-__RACE_THE_BEAM:
+__FILL_SINE_TEMP:
+	LEA	TEMP_SINE_PRECALC,A6
 	MOVE.L	LFO_AMPS_PF2,A1
 	LEA	LFO_AMPS,A2
 	LEA	LFO_SINE_PRECALC,A0	; ## SINCOSIN VALUES ##
@@ -198,43 +202,8 @@ __RACE_THE_BEAM:
 	CLR.L	D3
 	CLR.L	D5
 
-	.dummyWait:
-	MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
-	BTST	#$0,D1
-	BNE.S	.dummyWait
-	LSR.L	#$1,D1
-	LSR.W	#$7,D1
-
-	MOVE.W	(A0,D0.W),D3	; PRELOAD INITIAL VALUES
-	ADD.W	#$2,D0
-	AND.W	#$3F-1,D0
-
-	; ###### AMPLITUDE ##############
-	MULU.W	(A2)+,D3
-	DIVU.W	#16384,D3
-	MOVE.W	D3,D5
-	ADD.W	(A2)+,D3
-	ADD.W	(A1)+,D5
-	LSL.W 	#$4,D5
-	OR.W	D5,D3
-	; ###### AMPLITUDE ##############
-
-	.waitNextRaster:
-	MOVE.W	VHPOSR(A6),D2
-	AND.W	#$FF00,D2		; read vertical beam
-	CMP.W	D4,D2
-	BEQ.S	.waitNextRaster
-
-	MOVE.W	VHPOSR(A6),D4	; RACE THE BEAM!
-	AND.W	#$FF00,D4		; RACE THE BEAM!
-
-	CMP.W	#$DF,D1
-	BLO.S	.noSyncShift
-	ANDI.B	#$1,D1		; ONLY EVEN LINES
-	BEQ.S	.noSyncShift	
-
-	MOVE.W	D3,BPLCON1(A6)	; PRELOADED VALUES
-
+	MOVE.W	#26-1,D1
+	.loop:
 	MOVE.W	(A0,D0.W),D3
 	ADD.W	#$2,D0
 	AND.W	#$3F-1,D0
@@ -248,6 +217,37 @@ __RACE_THE_BEAM:
 	LSL.W 	#$4,D5
 	OR.W	D5,D3
 	; ###### AMPLITUDE ##############
+
+	MOVE.W	D3,(A6)+		; PRELOADED VALUES
+
+	DBRA	D1,.loop
+	LEA	CUSTOM,A6
+	RTS
+
+__RACE_THE_BEAM:
+	LEA	TEMP_SINE_PRECALC,A1
+	.dummyWait:
+	MOVE.W	VPOSR(A6),D1	; Read vert most sig. bits
+	BTST	#$0,D1
+	BNE.S	.dummyWait
+	LSR.L	#$1,D1
+	LSR.W	#$7,D1
+
+	.waitNextRaster:
+	MOVE.W	VHPOSR(A6),D2
+	AND.W	#$FF00,D2		; read vertical beam
+	CMP.W	D4,D2
+	BEQ.S	.waitNextRaster
+
+	MOVE.W	VHPOSR(A6),D4	; RACE THE BEAM!
+	AND.W	#$FF00,D4		; RACE THE BEAM!
+
+	CMP.W	#$DF,D1
+	BLO.S	.noSyncShift
+	ANDI.B	#$1,D1		; ONLY EVEN LINES
+	BEQ.S	.noSyncShift
+
+	MOVE.W	(A1)+,BPLCON1(A6)	; PRELOADED VALUES
 
 	.noSyncShift:
 	MOVE.L	VPOSR(A6),D1	; REACH SCREEN END
@@ -270,7 +270,7 @@ __SCROLL_PF2:
 	MOVE.L	A4,BLTDPTH(A6)
 	MOVE.W	#(blitHe*3<<6)+wi/16,BLTSIZE(A6)	; BLTSIZE
 	MOVE.W	#$98,COPPER\.PFsScrolling+2
-	;MOVE.L	#LFO_AMPS_PF2_ODD,LFO_AMPS_PF2
+	MOVE.L	#LFO_AMPS_PF2_ODD,LFO_AMPS_PF2
 	RTS
 
 __SCROLL_PF1:
@@ -285,7 +285,7 @@ __SCROLL_PF1:
 	MOVE.L	A4,BLTDPTH(A6)
 	MOVE.W	#(blitHe*2<<6)+wi/16,BLTSIZE(A6)	; BLTSIZE
 	MOVE.W	#$88,COPPER\.PFsScrolling+2
-	;MOVE.L	#LFO_AMPS_PF2_EVEN,LFO_AMPS_PF2
+	MOVE.L	#LFO_AMPS_PF2_EVEN,LFO_AMPS_PF2
 	RTS
 
 __PREP_BLIT_SLICE:
@@ -554,6 +554,7 @@ LFO_AMPS:		DC.W 2,7,3,6,4,6,5,5,6,5,7,4,8,4,9,3,10,2,11,2,12,1,13,1,14,0,15,0
 LFO_AMPS_PF2:	DC.L LFO_AMPS_PF2_EVEN
 LFO_AMPS_PF2_ODD:	DC.W 8,7,7,6,6,5,5,4,3,3,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 LFO_AMPS_PF2_EVEN:	DC.W 7,6,6,5,5,4,4,3,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+TEMP_SINE_PRECALC:	DCB.W 26*2
 		INCLUDE "sincosin_table.i"
 MED_MODULE:	INCLUDE "med/SCORE.i"
 

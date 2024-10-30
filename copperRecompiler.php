@@ -808,7 +808,7 @@ $copperLines='
 		if(!array_key_exists($i, $copperList)){	continue;	}
 		extractCopLines($i,$copperList[$i]);
 	}
-	//echo "\n".'	DC.W $FFFF,$FFFE';
+	echo "\n";	//.'	DC.W $FFFF,$FFFE';
 	//echo '	; # END COPPER LIST';
 
 	function extractCopLines($wait,$element){
@@ -821,11 +821,16 @@ $copperLines='
 		}
 		echo '	; # Wait';
 		if($tempLine%8==0){	echo ' LN '.($tempLine);	}
-		if(count($element['DCW'])){
-			echo "\n\t".'DC.W '.implode(',',$element['DCW']);
+		if(count((array) $element['DCW'])){
+			$chunks=array_chunk($element['DCW'], 4);
+			foreach($chunks AS $chunk){
+				echo "\n\t".'DC.W '.implode(',',$chunk);
+			}
 		}
 		foreach($element['LNS'] AS $value){
-			echo "\n\t".($value);
+			if($value){
+				echo "\n\t".($value);
+			}
 		}
 	}
 	//echo " (".count($copperLines)." | ". count($copperList). ")";

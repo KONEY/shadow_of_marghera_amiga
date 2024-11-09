@@ -340,6 +340,43 @@ $copperLines='
 	DC.W BPL1MOD,-1*bypl*3+2
 	DC.W BPL2MOD,-1*bypl*3+2
 
+
+	dc.w $e007,$fffe
+	dc.w $188,$111
+	dc.w $18a,$111
+
+	dc.w $e007,$fffe
+	dc.w $184,$122
+	dc.w $e407,$fffe
+	dc.w $184,$111
+	dc.w $fa07,$fffe
+	dc.w $184,$011
+
+	dc.w $e007,$fffe
+	dc.w $186,$122
+	dc.w $e407,$fffe
+	dc.w $186,$111
+	dc.w $fa07,$fffe
+	dc.w $186,$011
+
+	dc.w $e007,$fffe
+	dc.w $18c,$223
+	dc.w $e207,$fffe
+	dc.w $18c,$222
+	dc.w $e307,$fffe
+	dc.w $18c,$112
+	dc.w $ea07,$fffe
+	dc.w $18c,$111
+
+	dc.w $e007,$fffe
+	dc.w $18e,$223
+	dc.w $e207,$fffe
+	dc.w $18e,$222
+	dc.w $e307,$fffe
+	dc.w $18e,$112
+	dc.w $ea07,$fffe
+	dc.w $18e,$111
+
 	DC.W $FFDF,$FFFE
 
 	DC.W $1307,$FFFE

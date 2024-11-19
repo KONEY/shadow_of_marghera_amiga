@@ -379,141 +379,215 @@ $copperLines='
 	dc.w $18e,$111
 
 	dc.w $e007,$fffe
-	dc.w $19e,$bcc
-	dc.w $e507,$fffe
-	dc.w $19e,$abb
+	dc.w $19e,$ddd
+	dc.w $e307,$fffe
+	dc.w $19e,$cdd
+	dc.w $e407,$fffe
+	dc.w $19e,$ccc
 	dc.w $e707,$fffe
-	dc.w $19e,$aab
+	dc.w $19e,$bcb
 	dc.w $e807,$fffe
-	dc.w $19e,$9aa
-	dc.w $ea07,$fffe
-	dc.w $19e,$99a
-	dc.w $eb07,$fffe
-	dc.w $19e,$888
+	dc.w $19e,$cbb
+	dc.w $e907,$fffe
+	dc.w $19e,$bbb
+	dc.w $ec07,$fffe
+	dc.w $19e,$baa
 	dc.w $ed07,$fffe
-	dc.w $19e,$777
-	dc.w $ee07,$fffe
-	dc.w $19e,$776
+	dc.w $19e,$aaa
+	dc.w $ef07,$fffe
+	dc.w $19e,$9a9
 	dc.w $f007,$fffe
-	dc.w $19e,$688
-	dc.w $f107,$fffe
-	dc.w $19e,$677
+	dc.w $19e,$999
+	dc.w $f307,$fffe
+	dc.w $19e,$989
 	dc.w $f407,$fffe
-	dc.w $19e,$667
+	dc.w $19e,$898
 	dc.w $f507,$fffe
-	dc.w $19e,$566
+	dc.w $19e,$888
 	dc.w $f707,$fffe
-	dc.w $19e,$456
+	dc.w $19e,$877
 	dc.w $f807,$fffe
-	dc.w $19e,$455
+	dc.w $19e,$777
 	dc.w $fb07,$fffe
-	dc.w $19e,$344
+	dc.w $19e,$767
+	dc.w $fc07,$fffe
+	dc.w $19e,$776
+	dc.w $fd07,$fffe
+	dc.w $19e,$666
 	dc.w $ffdf,$fffe ; PAL fix
-	dc.w $207,$fffe
-	dc.w $19e,$333
+	dc.w $007,$fffe
+	dc.w $19e,$556
+	dc.w $107,$fffe
+	dc.w $19e,$555
+	dc.w $407,$fffe
+	dc.w $19e,$544
+	dc.w $507,$fffe
+	dc.w $19e,$554
+	dc.w $607,$fffe
+	dc.w $19e,$444
 	dc.w $807,$fffe
+	dc.w $19e,$343
+	dc.w $907,$fffe
+	dc.w $19e,$444
+	dc.w $a07,$fffe
+	dc.w $19e,$333
+	dc.w $d07,$fffe
+	dc.w $19e,$332
+	dc.w $e07,$fffe
 	dc.w $19e,$223
-	dc.w $1207,$fffe
+	dc.w $f07,$fffe
+	dc.w $19e,$323
+	dc.w $1007,$fffe
 	dc.w $19e,$222
-	dc.w $1307,$fffe
-	dc.w $19e,$122
+	dc.w $1207,$fffe
+	dc.w $19e,$224
 
-	dc.w $e007,$fffe
+
+	dc.w $e107,$fffe
 	dc.w $19c,$999
-	dc.w $e507,$fffe
+	dc.w $e407,$fffe
 	dc.w $19c,$898
 	dc.w $e607,$fffe
-	dc.w $19c,$888
-	dc.w $e807,$fffe
-	dc.w $19c,$787
-	dc.w $e907,$fffe
-	dc.w $19c,$777
-	dc.w $ec07,$fffe
-	dc.w $19c,$766
-	dc.w $ed07,$fffe
-	dc.w $19c,$666
-	dc.w $f007,$fffe
-	dc.w $19c,$566
-	dc.w $f107,$fffe
-	dc.w $19c,$555
-	dc.w $f407,$fffe
-	dc.w $19c,$545
-	dc.w $f507,$fffe
-	dc.w $19c,$444
-	dc.w $f907,$fffe
-	dc.w $19c,$333
-	dc.w $fd07,$fffe
-	dc.w $19c,$222
-	dc.w $ffdf,$fffe ; PAL fix
-	dc.w $207,$fffe
-	dc.w $19c,$221
-	dc.w $407,$fffe
-	dc.w $19c,$122
-	dc.w $e07,$fffe
-	dc.w $19c,$121
-
-	dc.w $e007,$fffe
-	dc.w $19a,$676
-	dc.w $e107,$fffe
-	dc.w $19a,$666
+	dc.w $19c,$889
 	dc.w $e707,$fffe
-	dc.w $19a,$555
-	dc.w $ed07,$fffe
-	dc.w $19a,$454
-	dc.w $ee07,$fffe
-	dc.w $19a,$544
+	dc.w $19c,$888
+	dc.w $ea07,$fffe
+	dc.w $19c,$788
+	dc.w $ec07,$fffe
+	dc.w $19c,$777
 	dc.w $ef07,$fffe
-	dc.w $19a,$444
-	dc.w $f407,$fffe
-	dc.w $19a,$434
-	dc.w $f507,$fffe
-	dc.w $19a,$333
-	dc.w $fa07,$fffe
-	dc.w $19a,$232
-	dc.w $fb07,$fffe
-	dc.w $19a,$323
-	dc.w $fc07,$fffe
-	dc.w $19a,$222
+	dc.w $19c,$767
+	dc.w $f107,$fffe
+	dc.w $19c,$667
+	dc.w $f207,$fffe
+	dc.w $19c,$666
+	dc.w $f607,$fffe
+	dc.w $19c,$656
+	dc.w $f807,$fffe
+	dc.w $19c,$555
+	dc.w $fe07,$fffe
+	dc.w $19c,$445
+	dc.w $ff07,$fffe
+	dc.w $19c,$444
 	dc.w $ffdf,$fffe ; PAL fix
 	dc.w $207,$fffe
-	dc.w $19a,$221
+	dc.w $19c,$443
 	dc.w $307,$fffe
-	dc.w $19a,$211
+	dc.w $19c,$433
+	dc.w $407,$fffe
+	dc.w $19c,$333
 	dc.w $507,$fffe
-	dc.w $19a,$122
-	dc.w $e07,$fffe
-	dc.w $19a,$111
+	dc.w $19c,$433
+	dc.w $607,$fffe
+	dc.w $19c,$333
+	dc.w $a07,$fffe
+	dc.w $19c,$332
+	dc.w $b07,$fffe
+	dc.w $19c,$222
+	dc.w $c07,$fffe
+	dc.w $19c,$223
+	dc.w $d07,$fffe
+	dc.w $19c,$222
+	dc.w $1207,$fffe
+	dc.w $19c,$112
+
+
+	dc.w $e107,$fffe
+	dc.w $19a,$777
+	dc.w $e407,$fffe
+	dc.w $19a,$667
+	dc.w $e507,$fffe
+	dc.w $19a,$766
+	dc.w $e607,$fffe
+	dc.w $19a,$667
+	dc.w $e807,$fffe
+	dc.w $19a,$666
+	dc.w $ec07,$fffe
+	dc.w $19a,$656
+	dc.w $ed07,$fffe
+	dc.w $19a,$556
+	dc.w $ee07,$fffe
+	dc.w $19a,$666
+	dc.w $ef07,$fffe
+	dc.w $19a,$565
+	dc.w $f007,$fffe
+	dc.w $19a,$555
+	dc.w $f507,$fffe
+	dc.w $19a,$455
+	dc.w $f607,$fffe
+	dc.w $19a,$554
+	dc.w $f707,$fffe
+	dc.w $19a,$445
+	dc.w $f807,$fffe
+	dc.w $19a,$544
+	dc.w $f907,$fffe
+	dc.w $19a,$444
+	dc.w $ffdf,$fffe ; PAL fix
+	dc.w $007,$fffe
+	dc.w $19a,$334
+	dc.w $107,$fffe
+	dc.w $19a,$444
+	dc.w $207,$fffe
+	dc.w $19a,$333
+	dc.w $a07,$fffe
+	dc.w $19a,$233
+	dc.w $b07,$fffe
+	dc.w $19a,$222
+	dc.w $c07,$fffe
+	dc.w $19a,$332
+	dc.w $d07,$fffe
+	dc.w $19a,$222
+	dc.w $1207,$fffe
+	dc.w $19a,$113
 
 
 	dc.w $e107,$fffe
 	dc.w $198,$555
-	dc.w $e207,$fffe
+	dc.w $e707,$fffe
 	dc.w $198,$444
-	dc.w $eb07,$fffe
+	dc.w $e807,$fffe
+	dc.w $198,$454
+	dc.w $e907,$fffe
+	dc.w $198,$444
+	dc.w $f307,$fffe
 	dc.w $198,$344
-	dc.w $ec07,$fffe
-	dc.w $198,$434
-	dc.w $ed07,$fffe
-	dc.w $198,$343
-	dc.w $ee07,$fffe
+	dc.w $f407,$fffe
+	dc.w $198,$443
+	dc.w $f507,$fffe
 	dc.w $198,$333
-	dc.w $f707,$fffe
-	dc.w $198,$322
-	dc.w $f807,$fffe
-	dc.w $198,$223
-	dc.w $f907,$fffe
-	dc.w $198,$222
 	dc.w $ffdf,$fffe ; PAL fix
+	dc.w $107,$fffe
+	dc.w $198,$233
 	dc.w $207,$fffe
-	dc.w $198,$221
+	dc.w $198,$333
+	dc.w $307,$fffe
+	dc.w $198,$323
 	dc.w $407,$fffe
+	dc.w $198,$233
+	dc.w $507,$fffe
+	dc.w $198,$323
+	dc.w $607,$fffe
+	dc.w $198,$222
+	dc.w $807,$fffe
+	dc.w $198,$322
+	dc.w $907,$fffe
+	dc.w $198,$222
+	dc.w $1207,$fffe
 	dc.w $198,$121
-
-
 
 	dc.w $e107,$fffe
 	dc.w $196,$444
-	dc.w $e907,$fffe
+	dc.w $e407,$fffe
+	dc.w $196,$434
+	dc.w $e507,$fffe
+	dc.w $196,$444
+	dc.w $e607,$fffe
+	dc.w $196,$343
+	dc.w $e707,$fffe
+	dc.w $196,$444
+	dc.w $e807,$fffe
+	dc.w $196,$343
+	dc.w $ea07,$fffe
 	dc.w $196,$334
 	dc.w $eb07,$fffe
 	dc.w $196,$333
@@ -521,41 +595,136 @@ $copperLines='
 	dc.w $196,$433
 	dc.w $ed07,$fffe
 	dc.w $196,$333
-	dc.w $f507,$fffe
-	dc.w $196,$322
-	dc.w $f607,$fffe
+	dc.w $fb07,$fffe
 	dc.w $196,$332
-	dc.w $f707,$fffe
-	dc.w $196,$222
+	dc.w $fd07,$fffe
+	dc.w $196,$233
+	dc.w $fe07,$fffe
+	dc.w $196,$323
+	dc.w $ff07,$fffe
+	dc.w $196,$322
 	dc.w $ffdf,$fffe ; PAL fix
-	dc.w $307,$fffe
-	dc.w $196,$221
-	dc.w $f07,$fffe
-	dc.w $196,$111
+	dc.w $007,$fffe
+	dc.w $196,$233
+	dc.w $107,$fffe
+	dc.w $196,$222
+	dc.w $407,$fffe
+	dc.w $196,$223
+	dc.w $507,$fffe
+	dc.w $196,$222
 
-
-	dc.w $e007,$fffe
-	dc.w $194,$333
-	dc.w $e207,$fffe
-	dc.w $194,$233
-	dc.w $e707,$fffe
-	dc.w $194,$232
-	dc.w $e907,$fffe
-	dc.w $194,$222
-	dc.w $ef07,$fffe
-	dc.w $194,$122
-	dc.w $f407,$fffe
-	dc.w $194,$121
 
 	dc.w $e107,$fffe
-	dc.w $192,$332
+	dc.w $194,$233
+	dc.w $e407,$fffe
+	dc.w $194,$232
+	dc.w $e507,$fffe
+	dc.w $194,$133
+	dc.w $e607,$fffe
+	dc.w $194,$232
+	dc.w $e707,$fffe
+	dc.w $194,$132
+	dc.w $e807,$fffe
+	dc.w $194,$123
+	dc.w $e907,$fffe
+	dc.w $194,$232
+	dc.w $ea07,$fffe
+	dc.w $194,$133
+	dc.w $eb07,$fffe
+	dc.w $194,$222
+	dc.w $ec07,$fffe
+	dc.w $194,$223
+	dc.w $ed07,$fffe
+	dc.w $194,$232
+	dc.w $ee07,$fffe
+	dc.w $194,$233
 	dc.w $ef07,$fffe
-	dc.w $192,$322
+	dc.w $194,$223
 	dc.w $f007,$fffe
-	dc.w $192,$222
+	dc.w $194,$222
+	dc.w $f307,$fffe
+	dc.w $194,$132
+	dc.w $f407,$fffe
+	dc.w $194,$222
+	dc.w $f507,$fffe
+	dc.w $194,$232
+	dc.w $f707,$fffe
+	dc.w $194,$222
+	dc.w $fb07,$fffe
+	dc.w $194,$122
+	dc.w $fe07,$fffe
+	dc.w $194,$222
+	dc.w $ff07,$fffe
+	dc.w $194,$122
 	dc.w $ffdf,$fffe ; PAL fix
+	dc.w $007,$fffe
+	dc.w $194,$222
+	dc.w $c07,$fffe
+	dc.w $194,$122
+	dc.w $d07,$fffe
+	dc.w $194,$222
 	dc.w $f07,$fffe
+	dc.w $194,$211
+	dc.w $1007,$fffe
+	dc.w $194,$221
+	dc.w $1107,$fffe
+	dc.w $194,$122
+
+
+	dc.w $e207,$fffe
+	dc.w $192,$223
+	dc.w $e307,$fffe
+	dc.w $192,$123
+	dc.w $e407,$fffe
+	dc.w $192,$223
+	dc.w $e507,$fffe
+	dc.w $192,$212
+	dc.w $e907,$fffe
+	dc.w $192,$222
+	dc.w $ea07,$fffe
+	dc.w $192,$212
+	dc.w $eb07,$fffe
+	dc.w $192,$122
+	dc.w $ec07,$fffe
+	dc.w $192,$112
+	dc.w $ef07,$fffe
+	dc.w $192,$122
+	dc.w $f007,$fffe
+	dc.w $192,$212
+	dc.w $f107,$fffe
+	dc.w $192,$112
+	dc.w $f607,$fffe
+	dc.w $192,$122
+	dc.w $f707,$fffe
+	dc.w $192,$112
+	dc.w $f907,$fffe
 	dc.w $192,$111
+	dc.w $fc07,$fffe
+	dc.w $192,$112
+	dc.w $fe07,$fffe
+	dc.w $192,$111
+	dc.w $ff07,$fffe
+	dc.w $192,$112
+	dc.w $ffdf,$fffe ; PAL fix
+	dc.w $107,$fffe
+	dc.w $192,$111
+	dc.w $607,$fffe
+	dc.w $192,$011
+	dc.w $807,$fffe
+	dc.w $192,$111
+	dc.w $b07,$fffe
+	dc.w $192,$010
+	dc.w $c07,$fffe
+	dc.w $192,$111
+	dc.w $d07,$fffe
+	dc.w $192,$101
+	dc.w $e07,$fffe
+	dc.w $192,$111
+	dc.w $f07,$fffe
+	dc.w $192,$110
+	dc.w $1007,$fffe
+	dc.w $192,$111
+	
 
 	DC.W $FFDF,$FFFE
 

@@ -2,6 +2,7 @@
 ## KONEY 2024 ## DEFRAG COPPERLISTS!
 ## ; https://gradient-blaster.grahambates.com/?points=013@0,113@34,213@62,313@84,413@104,513@120,613@131,713@141,813@150,923@158,b33@165,e73@175,e73@182,403@213,003@238&steps=256&blendMode=linear&ditherMode=orderedMono&target=amigaOcs&ditherAmount=12
 ## ; https://gradient-blaster.grahambates.com/?points=013@0,113@34,213@62,313@84,413@104,513@120,613@131,713@141,813@150,923@158,b33@165,e73@175,a52@186,723@199,211@210,111@219,011@230,000@237&steps=256&blendMode=linear&ditherMode=blueNoiseMono&target=amigaOcs&ditherAmount=0
+## ; https://gradient-blaster.grahambates.com/?points=013@0,113@34,213@62,313@84,413@104,513@120,613@131,713@141,813@150,923@158,b33@165,000@175,ddd@181,122@230&steps=256&blendMode=oklab&ditherMode=whiteNoise&target=amigaOcs&ditherAmount=70
 
 $copperLines='
 	dc.w $2c07,$fffe

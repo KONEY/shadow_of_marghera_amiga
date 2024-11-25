@@ -99,19 +99,20 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	LEA	2(A5),A5
 	LEA	2(A3),A3
 	DBRA	D7,.pf1Loop
-	;## PF2 ##
-	MOVE.L	PF2_SLICE_POS,A5	; SRC
-	LEA	PF2,A3		; DEST
-	MOVE.W	#wi/16,D7		; FILL PF2
-	.pf2Loop:
-	BSR.W	__PREP_BLIT_SLICE
-	MOVE.W	#(blitHe*3<<6)+32/16,BLTSIZE(A6)
-	LEA	2(A5),A5
-	LEA	2(A3),A3
-	DBRA	D7,.pf2Loop
-	; ## PRE-POSITIONINGS ##
+	; ## PRE-POSITIONING ##
 	ADD.L	#$2,PF1_SLICE_POS
-	ADD.L	#$2,PF2_SLICE_POS
+	;## PF2 ##
+	;MOVE.L	PF2_SLICE_POS,A5	; SRC
+	;LEA	PF2,A3		; DEST
+	;MOVE.W	#wi/16,D7		; FILL PF2
+	;.pf2Loop:
+	;BSR.W	__PREP_BLIT_SLICE
+	;MOVE.W	#(blitHe*3<<6)+32/16,BLTSIZE(A6)
+	;LEA	2(A5),A5
+	;LEA	2(A3),A3
+	;DBRA	D7,.pf2Loop
+	;; ## PRE-POSITIONING ##
+	;ADD.L	#$2,PF2_SLICE_POS
 
 	JSR	__ADD_BLEED_WORDS
 
@@ -154,7 +155,7 @@ MainLoop:
 
 	BSR.W	__FILL_SINE_TEMP
 
-	INCLUDE "joySpriteCtrl.i"
+	;INCLUDE "joySpriteCtrl.i"
 
 	;*--- main loop end ---*
 	;BTST	#$6,$BFE001	; POTINP - LMB pressed?
@@ -679,8 +680,9 @@ COPPER:	; #### COPPERLIST ####################################################
 	;DC.W $EC,0,$EE,0	; 2
 	;DC.W $F0,0,$F2,0	; 1
 	;DC.W $F4,0,$F6,0	; 2
-
 	DC.W $FFFF,$FFFE ; END COPPER LIST
+
+PF2:	INCBIN "PF2-0_352x116x3.raw"
 
 ;*******************************************************************************
 	SECTION ChipBuffers,BSS_C	;BSS doesn't count toward exe size
@@ -689,6 +691,6 @@ COPPER:	; #### COPPERLIST ####################################################
 BLEED:		DS.B (blitHe-50)*bypl
 _BLEED:
 PF1:		DS.B blitHe*bypl*2
-PF2:		DS.B blitHe*bypl*3
+;PF2:		DS.B blitHe*bypl*3
 
 END

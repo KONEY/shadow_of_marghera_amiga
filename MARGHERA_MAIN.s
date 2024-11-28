@@ -101,18 +101,14 @@ Demo:			;a4=VBR, a6=Custom Registers Base addr
 	DBRA	D7,.pf1Loop
 	; ## PRE-POSITIONING ##
 	ADD.L	#$2,PF1_SLICE_POS
-	;## PF2 ##
-	;MOVE.L	PF2_SLICE_POS,A5	; SRC
-	;LEA	PF2,A3		; DEST
-	;MOVE.W	#wi/16,D7		; FILL PF2
-	;.pf2Loop:
-	;BSR.W	__PREP_BLIT_SLICE
-	;MOVE.W	#(blitHe*3<<6)+32/16,BLTSIZE(A6)
-	;LEA	2(A5),A5
-	;LEA	2(A3),A3
-	;DBRA	D7,.pf2Loop
-	;; ## PRE-POSITIONING ##
-	;ADD.L	#$2,PF2_SLICE_POS
+
+	;## PF2 ## WITH CPU FROM FAST RAM ##
+	LEA	PF2INITIAL,A5	; SRC
+	LEA	PF2,A3		; DEST
+	MOVE.W	#bypl/4*blitHe*3-1,D7	; FILL PF2
+	.pf2Loop:
+	MOVE.L	(A5)+,(A3)+
+	DBRA	D7,.pf2Loop
 
 	JSR	__ADD_BLEED_WORDS
 
@@ -560,12 +556,11 @@ LFO_AMPS_PF2_ODD:	DC.W 8,7,7,6,6,5,5,4,3,3,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 LFO_AMPS_PF2_EVEN:	DC.W 7,6,6,5,5,4,4,3,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 TEMP_SINE_PRECALC:	DCB.W 26*2
 		INCLUDE "sincosin_table.i"
+PF2INITIAL:	INCBIN "PF2-0_352x116x3.raw"
 MED_MODULE:	INCLUDE "med/SCORE.i"
-
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
-
 MED_SAMPLES:	INCLUDE "med/SAMPLES.i"	;<<<<< MED SAMPLES IN CHIP RAM!!
 _MED_SAMPLES:
 	IFNE	SPLIT_RELOCS
@@ -575,12 +570,18 @@ _chipzero:	DC.L 0
 FLAME_MASK:	INCBIN "flame_mask_32x228x1.raw"
 SPRFIRE1:	DC.B $3B,$B5,$3B+flameHe+1,%00000001	; VSTART $2C-$F2 | HSTART $44 | VSTOP | CTRLBITS
 	.data:
-	DCB.W flameHe*2,0
+	REPT flameHe+1
+	;DCB.W flameHe*2,0
 	DC.L 0
+	ENDR
+	;DC.L 0
 SPRFIRE2:	DC.B $41,$B5,$41+flameHe+1,%10000000	; VSTART $2C-$F2 | HSTART $44 | VSTOP | CTRLBITS
 	.data:
-	DCB.W flameHe*2,0
+	REPT flameHe+1
+	;DCB.W flameHe*2,0
 	DC.L 0
+	ENDR
+	;DC.L 0
 
 BGR:	DS.W bgHe*2			; DEFINE AN EMPTY AREA FOR THE BLEEDS
 BGR_DATA:	INCBIN "BGR_320x180x1.raw"
@@ -682,8 +683,6 @@ COPPER:	; #### COPPERLIST ####################################################
 	;DC.W $F4,0,$F6,0	; 2
 	DC.W $FFFF,$FFFE ; END COPPER LIST
 
-PF2:	INCBIN "PF2-0_352x116x3.raw"
-
 ;*******************************************************************************
 	SECTION ChipBuffers,BSS_C	;BSS doesn't count toward exe size
 ;*******************************************************************************
@@ -691,6 +690,6 @@ PF2:	INCBIN "PF2-0_352x116x3.raw"
 BLEED:		DS.B (blitHe-50)*bypl
 _BLEED:
 PF1:		DS.B blitHe*bypl*2
-;PF2:		DS.B blitHe*bypl*3
+PF2:		DS.B blitHe*bypl*3
 
 END

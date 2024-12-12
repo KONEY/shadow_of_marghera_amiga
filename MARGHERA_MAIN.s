@@ -581,12 +581,12 @@ LFO_AMPS_PF2_EVEN:	DC.W 7,6,6,5,5,4,4,3,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 TEMP_SINE_PRECALC:	DCB.W 26*2
 		INCLUDE "sincosin_table.i"
 PF2INITIAL:	INCBIN "PF2-0_352x116x3.raw"
-MED_MODULE:	INCLUDE "med/SCORE.i"
+MED_MODULE:	INCBIN "med/VIC-20_2024FIX_SPD34_trunc.med"
+
 ;*******************************************************************************
 	SECTION	ChipData,DATA_C	;declared data that must be in chipmem
 ;*******************************************************************************
 MED_SAMPLES:	INCLUDE "med/SAMPLES.i"	;<<<<< MED SAMPLES IN CHIP RAM!!
-_MED_SAMPLES:
 	IFNE	SPLIT_RELOCS
 _chipzero:	DC.L 0
 	ENDC
